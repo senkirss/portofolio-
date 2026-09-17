@@ -16,14 +16,30 @@
   }, 120);
 })();
 
-// 2. Navbar scroll + parallax hero
+// 2. Navbar scroll + parallax hero + section atmospheres
 const navbar = document.getElementById('navbar');
 const heroBg = document.getElementById('heroBg');
+const sectionAtmos = document.querySelectorAll('.section-atmos');
 window.addEventListener('scroll', ()=>{
   navbar.classList.toggle('scrolled', window.scrollY > 60);
   if(heroBg && window.scrollY < window.innerHeight){
     heroBg.style.transform = `translateY(${window.scrollY * 0.3}px)`;
   }
+  // Section atmospheres scroll parallax
+  const sy = window.scrollY;
+  sectionAtmos.forEach(atmos=>{
+    const section = atmos.closest('section');
+    if(!section) return;
+    const rect = section.getBoundingClientRect();
+    const vh = window.innerHeight;
+    // Only parallax when section is near viewport
+    if(rect.bottom > -vh/2 && rect.top < vh*1.5){
+      const progress = (vh - rect.top) / (vh + rect.height); // 0 to 1
+      const depth = parseFloat(atmos.dataset.depth) || 0.015;
+      const offset = (progress - 0.5) * vh * depth * 2;
+      atmos.style.transform = `translateY(${offset}px) scale(1.04)`;
+    }
+  });
 }, {passive:true});
 
 // 2b. Video fade-in saat siap
@@ -58,6 +74,28 @@ window.addEventListener('scroll', ()=>{
       l.style.marginTop = `${cy * d * 400}px`;
     });
     if(center) center.style.transform = `translate(${cx*-18}px, ${cy*-14}px)`;
+    requestAnimationFrame(loop);
+  })();
+})();
+
+// 2c2. Subtle mouse parallax for section atmospheres (desktop only, very gentle)
+(function sectionMouseParallax(){
+  if(!window.matchMedia('(hover:hover)').matches) return;
+  const atmos = document.querySelectorAll('.section-atmos');
+  if(!atmos.length) return;
+  let tx=0, ty=0, cx=0, cy=0;
+  document.addEventListener('mousemove', e=>{
+    tx = (e.clientX / window.innerWidth) - 0.5;
+    ty = (e.clientY / window.innerHeight) - 0.5;
+  });
+  (function loop(){
+    cx += (tx-cx)*0.02; // very slow lerp
+    cy += (ty-cy)*0.02;
+    atmos.forEach(a=>{
+      const d = parseFloat(a.dataset.depth) || 0.015;
+      // Very subtle movement
+      a.style.transform += ` translate(${cx * d * 120}px, ${cy * d * 80}px)`;
+    });
     requestAnimationFrame(loop);
   })();
 })();
@@ -122,24 +160,43 @@ const mobileMenu = document.getElementById('mobileMenu');
 burger.addEventListener('click', ()=> mobileMenu.classList.toggle('open'));
 mobileMenu.querySelectorAll('a').forEach(a=> a.addEventListener('click', ()=> mobileMenu.classList.remove('open')));
 
-// 4. Reveal on scroll
+// 4. Reveal on scroll — with stagger for cinematic feel
 const io = new IntersectionObserver((entries)=>{
   entries.forEach(e=>{
     if(e.isIntersecting){
-      e.target.classList.add('visible');
+      const el = e.target;
+      el.classList.add('visible');
+      // Stagger children with .reveal
+      const children = el.querySelectorAll('.reveal:not(.visible)');
+      children.forEach((child, i)=>{
+        child.style.transitionDelay = `${i * 80}ms`;
+        child.classList.add('visible');
+        // clean delay after animation
+        setTimeout(()=> child.style.transitionDelay = '', 1000 + i * 80);
+      });
       // skill bars
-      if(e.target.classList.contains('skill')){
-        const f = e.target.querySelector('.fill');
+      if(el.classList.contains('skill')){
+        const f = el.querySelector('.fill');
         if(f) f.style.width = f.dataset.w;
       }
       // counters
-      const c = e.target.querySelector?.('.counter');
+      const c = el.querySelector?.('.counter');
       if(c && !c.dataset.done) animateCount(c);
-      if(e.target.classList.contains('counter') && !e.target.dataset.done) animateCount(e.target);
+      if(el.classList.contains('counter') && !el.dataset.done) animateCount(el);
     }
   });
-},{threshold:0.15});
+},{threshold:0.12, rootMargin:'0px 0px -50px 0px'});
 document.querySelectorAll('.reveal, .reveal-img, .skill, .stat').forEach(el=> io.observe(el));
+
+// Also observe section containers for stagger
+const sectionIO = new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      e.target.classList.add('section-visible');
+    }
+  });
+},{threshold:0.08});
+document.querySelectorAll('section[id]').forEach(s=> sectionIO.observe(s));
 
 function animateCount(el){
   el.dataset.done = 1;
