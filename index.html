@@ -12,63 +12,6 @@
 </head>
 <body>
 
-  <!-- GERBANG TURING-EDU : wajib main sebelum masuk portofolio -->
-  <div id="turingGate">
-    <div class="turing-card">
-      <div class="turing-head">
-        <p class="turing-kicker">Tugas Mandiri: Merancang Cetak Biru “Turing-Edu”</p>
-        <h2>Game Matematika <em>Uji Turing</em></h2>
-        <p class="turing-desc">Selesaikan soal penjumlahan & perkalian, lalu tebak: soal ini dibuat oleh <strong>🤖 Bot Komputer (AI)</strong> atau <strong>🧑‍🏫 Guru Sungguhan (Manusia)</strong>? Selesaikan 5 ronde untuk membuka portofolio.</p>
-      </div>
-      <div class="turing-cols">
-        <aside class="turing-info">
-          <h4>📌 Objektif Tugas</h4>
-          <p>Wireframe game edukasi matematika yang menggabungkan misteri Uji Turing.</p>
-          <h4>🎮 Mekanika Wajib</h4>
-          <p>1. Jawab soal matematika.<br />2. Setiap jawaban <strong>langsung dinotifikasi</strong> siapa pembuatnya (AI / Manusia).<br />3. Di akhir level, tebak asal soal untuk bonus Turing.</p>
-          <h4>📦 Output</h4>
-          <p>Wireframe UI ini + paragraf umpan balik di bawah arena.</p>
-          <div class="turing-legend">
-            <span class="pill ai">🤖 = AI / Bot</span>
-            <span class="pill human">🧑‍🏫 = Manusia / Guru</span>
-          </div>
-        </aside>
-        <div class="turing-arena">
-          <div class="turing-top">
-            <span id="turingRound">Ronde 1/5</span>
-            <div class="turing-progress"><div id="turingProg"></div></div>
-            <span id="turingScore">Skor: 0</span>
-          </div>
-          <div id="turingQBox">
-            <p id="turingQLabel">Soal Misteri #1</p>
-            <h3 id="turingQuestion">1 + 1 = ?</h3>
-            <div class="turing-row">
-              <input type="number" id="turingAnswer" placeholder="Jawaban..." />
-              <button id="turingCheck" class="btn btn-small">Jawab</button>
-            </div>
-            <div id="turingGuessBox" class="hidden">
-              <p>Menurutmu soal ini buatan siapa?</p>
-              <div class="turing-row">
-                <button class="guess-btn" data-guess="ai">🤖 Bot (AI)</button>
-                <button class="guess-btn" data-guess="manusia">🧑‍🏫 Guru (Manusia)</button>
-              </div>
-            </div>
-            <div id="turingNotif"></div>
-            <button id="turingNext" class="btn btn-dark hidden">Soal Berikutnya →</button>
-          </div>
-          <div id="turingFinal" class="hidden">
-            <h3 id="turingFinalTitle">Misi Selesai! 🎉</h3>
-            <p id="turingFinalScore"></p>
-            <p id="turingFinalTuring"></p>
-            <button id="turingEnter" class="btn">Masuk Portofolio →</button>
-            <button id="turingReplay" class="btn-play dark">↻ Main Lagi</button>
-          </div>
-          <p class="turing-feedback-info"><strong>Mekanisme umpan balik:</strong> setiap jawaban matematika langsung memicu notifikasi ganda — (1) benar/salah matematis beserta kunci jawaban, dan (2) identitas pembuat soal (AI/Manusia) beserta alasannya (gaya bahasa & pola angka); tebakan asal-soal lalu dinilai tepat/salah untuk melatih literasi Turing, dan skor akhir membuka akses portofolio.</p>
-        </div>
-      </div>
-    </div>
-  </div>
-
   <!-- Preloader -->
   <div id="preloader">
     <div class="pre-inner">
@@ -413,6 +356,5 @@
   </footer>
 
   <script src="script.js"></script>
-  <script src="turing-edu.js"></script>
 </body>
 </html>
