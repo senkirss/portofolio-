@@ -157,45 +157,59 @@
           <p class="head-desc reveal">Geser ke samping — seperti memilih ekspedisi di White Desert. Setiap kartu adalah bagian dari cerita saya.</p>
         </div>
       </div>
-      <div class="h-scroll" id="hScroll">
-        <article class="trip-card reveal">
-          <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=800&auto=format&fit=crop" alt="Nama" />
-          <div class="trip-body">
-            <p class="trip-tag">Identitas</p>
-            <h3>Nama Lengkap</h3>
-            <p>Rasendriya Muhammad Adisanto</p>
-            <span class="trip-meta">1CC5 • Mahasiswa</span>
+      <div class="reel-wrap">
+        <div class="reel-viewport" id="reelViewport">
+          <div class="h-scroll" id="hScroll">
+            <article class="trip-card reveal" data-index="0">
+              <div class="card-media"><img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=800&auto=format&fit=crop" alt="Nama" /><span class="card-num">01</span></div>
+              <div class="trip-body">
+                <p class="trip-tag">Identitas</p>
+                <h3>Nama Lengkap</h3>
+                <p>Rasendriya Muhammad Adisanto</p>
+                <span class="trip-meta">1CC5 • Mahasiswa</span>
+              </div>
+            </article>
+            <article class="trip-card reveal" data-index="1">
+              <div class="card-media"><img src="assets/open%20ccit.jpeg" alt="Kelas" /><span class="card-num">02</span></div>
+              <div class="trip-body">
+                <p class="trip-tag">Akademik</p>
+                <h3>Kelas 1CC5</h3>
+                <p>Fokus pada dasar komputasi, kolaborasi, dan disiplin belajar.</p>
+                <span class="trip-meta">Aktif • Semester Awal</span>
+              </div>
+            </article>
+            <article class="trip-card reveal" data-index="2">
+              <div class="card-media"><img src="https://images.unsplash.com/photo-1564013799919-ab600027ffc6?q=80&w=800&auto=format&fit=crop" alt="Alamat" /><span class="card-num">03</span></div>
+              <div class="trip-body">
+                <p class="trip-tag">Domisili</p>
+                <h3>Casamora Jagakarsa</h3>
+                <p>Perumahan Casamora, Jagakarsa, Jakarta Selatan.</p>
+                <span class="trip-meta">6°18' S, 106°49' E</span>
+              </div>
+            </article>
+            <article class="trip-card reveal" data-index="3">
+              <div class="card-media"><img src="assets/MAN%2013%20JAKARTA.jpg" alt="Pendidikan" /><span class="card-num">04</span></div>
+              <div class="trip-body">
+                <p class="trip-tag">Pendidikan Terakhir</p>
+                <h3>MAN 13 Jakarta Selatan</h3>
+                <p>Madrasah Aliyah Negeri 13 Jakarta Selatan — fondasi akademik & karakter.</p>
+                <span class="trip-meta">Alumni • Lulus</span>
+              </div>
+            </article>
           </div>
-        </article>
-        <article class="trip-card reveal">
-          <img src="assets/open%20ccit.jpeg" alt="Kelas" />
-          <div class="trip-body">
-            <p class="trip-tag">Akademik</p>
-            <h3>Kelas 1CC5</h3>
-            <p>Fokus pada dasar komputasi, kolaborasi, dan disiplin belajar.</p>
-            <span class="trip-meta">Aktif • Semester Awal</span>
-          </div>
-        </article>
-        <article class="trip-card reveal">
-          <img src="https://images.unsplash.com/photo-1564013799919-ab600027ffc6?q=80&w=800&auto=format&fit=crop" alt="Alamat" />
-          <div class="trip-body">
-            <p class="trip-tag">Domisili</p>
-            <h3>Casamora Jagakarsa</h3>
-            <p>Perumahan Casamora, Jagakarsa, Jakarta Selatan.</p>
-            <span class="trip-meta">6°18' S, 106°49' E</span>
-          </div>
-        </article>
-        <article class="trip-card reveal">
-          <img src="https://images.unsplash.com/photo-1541339907198-e08756dedf3f?q=80&w=800&auto=format&fit=crop" alt="Pendidikan" />
-          <div class="trip-body">
-            <p class="trip-tag">Pendidikan Terakhir</p>
-            <h3>MAN 13 Jakarta Selatan</h3>
-            <p>Madrasah Aliyah Negeri 13 Jakarta Selatan — fondasi akademik & karakter.</p>
-            <span class="trip-meta">Alumni • Lulus</span>
-          </div>
-        </article>
+        </div>
+        <div class="reel-fade left"></div>
+        <div class="reel-fade right"></div>
       </div>
-      <p class="drag-hint">← Geser / drag →</p>
+      <div class="container reel-controls">
+        <div class="reel-left">
+          <button class="reel-btn" id="reelPrev" aria-label="Sebelumnya">‹</button>
+          <button class="reel-btn" id="reelNext" aria-label="Selanjutnya">›</button>
+          <span class="reel-counter"><span id="reelCurrent">01</span> / 04</span>
+        </div>
+        <div class="reel-progress"><div id="reelProg"></div></div>
+        <span class="reel-hint">drag • scroll • geser</span>
+      </div>
     </section>
 
     <!-- QUOTE -->

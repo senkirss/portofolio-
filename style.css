@@ -146,17 +146,43 @@ body.paused #heroImg,body.paused .mist,body.paused .sun-glow{animation-play-stat
 .img-duo img{border-radius:var(--radius);height:420px;object-fit:cover;width:100%}
 .img-duo .tall{height:520px;margin-top:-40px}
 
-/* h-scroll cards */
-.h-scroll{display:flex;gap:22px;overflow-x:auto;padding:20px 32px 10px;scroll-snap-type:x mandatory;scrollbar-width:none}
+/* ===== REEL Sinematik — Data Diri ===== */
+#data-diri{padding-bottom:40px}
+.reel-wrap{position:relative;margin-top:36px}
+.reel-viewport{overflow:hidden;cursor:grab}
+.reel-viewport.dragging{cursor:grabbing}
+.h-scroll{display:flex;gap:22px;overflow-x:auto;padding:14px 32px 34px;scroll-snap-type:x mandatory;scrollbar-width:none;scroll-padding:0 32px;scroll-behavior:smooth}
 .h-scroll::-webkit-scrollbar{display:none}
-.trip-card{min-width:320px;max-width:340px;background:var(--cream);color:var(--ink);border-radius:var(--radius);overflow:hidden;scroll-snap-align:start;transition:.35s}
-.trip-card:hover{transform:translateY(-8px)}
-.trip-card img{height:220px;width:100%;object-fit:cover}
-.trip-body{padding:22px}
+.reel-fade{position:absolute;top:0;bottom:34px;width:80px;pointer-events:none;z-index:2;transition:opacity .3s}
+.reel-fade.left{left:0;background:linear-gradient(90deg,var(--brown-dark),transparent)}
+.reel-fade.right{right:0;background:linear-gradient(-90deg,var(--brown-dark),transparent)}
+.trip-card{min-width:340px;max-width:360px;background:var(--cream);color:var(--ink);border-radius:22px;overflow:hidden;scroll-snap-align:start;transition:transform .6s cubic-bezier(.16,1,.3,1), box-shadow .6s, filter .6s;box-shadow:0 10px 30px rgba(0,0,0,.18);flex-shrink:0;display:flex;flex-direction:column;filter:saturate(.92) brightness(.98)}
+.trip-card.active{transform:translateY(-6px) scale(1.02);box-shadow:0 22px 50px rgba(0,0,0,.32);filter:saturate(1) brightness(1)}
+.trip-card:hover{transform:translateY(-6px)}
+.card-media{position:relative;height:248px;overflow:hidden;background:var(--brown-dark)}
+.card-media img{height:100%;width:100%;object-fit:cover;transition:transform 1.2s cubic-bezier(.16,1,.3,1), filter .6s;filter:saturate(1.05)}
+.trip-card:hover .card-media img,.trip-card.active .card-media img{transform:scale(1.08)}
+.card-media::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 55%,rgba(43,26,14,.45) 100%)}
+.card-num{position:absolute;top:14px;left:14px;z-index:1;background:rgba(252,236,216,.92);color:var(--brown);font-size:.75rem;font-weight:800;letter-spacing:.15em;padding:6px 10px;border-radius:100px;border:1px solid rgba(110,53,17,.15)}
+.trip-body{padding:22px 22px 20px;flex:1;display:flex;flex-direction:column}
 .trip-tag{font-size:.72rem;letter-spacing:.25em;text-transform:uppercase;color:var(--olive);font-weight:800}
-.trip-body h3{font-family:var(--serif);font-size:1.6rem;margin:8px 0 6px;color:var(--brown)}
-.trip-meta{display:inline-block;margin-top:12px;background:var(--cream-light);border:1px solid #ead9c2;padding:6px 12px;border-radius:100px;font-size:.78rem;font-weight:700}
-.drag-hint{text-align:center;opacity:.5;margin-top:10px;font-size:.85rem;letter-spacing:.2em}
+.trip-body h3{font-family:var(--serif);font-size:1.6rem;margin:8px 0 6px;color:var(--brown);line-height:1.1}
+.trip-body p{font-size:.92rem;line-height:1.55;opacity:.85}
+.trip-meta{margin-top:auto;display:inline-block;background:var(--cream-light);border:1px solid #ead9c2;padding:7px 12px;border-radius:100px;font-size:.78rem;font-weight:700;align-self:flex-start}
+.reel-controls{display:flex;align-items:center;gap:18px;padding:14px 32px 0;flex-wrap:wrap}
+.reel-left{display:flex;align-items:center;gap:10px}
+.reel-btn{width:44px;height:44px;border-radius:50%;border:1px solid rgba(252,236,216,.35);background:rgba(252,236,216,.08);color:var(--cream);font-size:1.4rem;line-height:1;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:.3s;backdrop-filter:blur(6px)}
+.reel-btn:hover{background:var(--cream);color:var(--brown);border-color:var(--cream);transform:scale(1.05)}
+.reel-btn:disabled{opacity:.35;pointer-events:none}
+.reel-counter{font-size:.85rem;letter-spacing:.2em;font-weight:800;opacity:.8;min-width:56px}
+.reel-progress{flex:1;height:2px;background:rgba(252,236,216,.22);border-radius:100px;overflow:hidden;min-width:120px}
+#reelProg{height:100%;width:0;background:var(--sage);transition:width .5s cubic-bezier(.16,1,.3,1)}
+.reel-hint{font-size:.72rem;letter-spacing:.22em;text-transform:uppercase;opacity:.55}
+@media(max-width:900px){
+  .h-scroll{padding:14px 18px 34px;scroll-padding:0 18px}
+  .reel-controls{padding:14px 18px 0}
+  .trip-card{min-width:300px;max-width:320px}
+}
 
 /* quote */
 .quote-section{background:var(--cream);padding:110px 0;border-top:1px solid #ead9c2;border-bottom:1px solid #ead9c2}
