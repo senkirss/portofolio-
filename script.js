@@ -364,33 +364,27 @@ filmModal.addEventListener('click', e=>{ if(e.target === filmModal) filmModal.cl
   });
 })();
 
-// 9. Form kontak (FormSubmit + loading states + UX)
+// 9. Form kontak (WhatsApp Deep Link — works offline & online)
 (function contactForm(){
   const form = document.getElementById('contactForm');
   const msg = document.getElementById('formMsg');
   const btn = form.querySelector('.btn-submit');
   if(!form) return;
 
-  // Floating label: add placeholder-shown polyfill behavior
+  // Floating label behavior
   form.querySelectorAll('input, textarea').forEach(el=>{
     el.addEventListener('blur', ()=> el.classList.toggle('has-value', el.value.trim() !== ''));
     if(el.value.trim() !== '') el.classList.add('has-value');
   });
 
-  form.addEventListener('submit', async function(e){
+  form.addEventListener('submit', function(e){
     e.preventDefault();
     const nama = form.querySelector('#fNama').value.trim();
-    const email = form.querySelector('#fEmail').value.trim();
+    const kontak = form.querySelector('#fEmail').value.trim();
     const pesan = form.querySelector('#fPesan').value.trim();
 
-    if(!nama || !email || !pesan){
+    if(!nama || !kontak || !pesan){
       msg.textContent = 'Mohon lengkapi semua kolom dulu ya.';
-      msg.className = 'form-message err';
-      shakeForm();
-      return;
-    }
-    if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){
-      msg.textContent = 'Format email belum valid.';
       msg.className = 'form-message err';
       shakeForm();
       return;
@@ -399,31 +393,25 @@ filmModal.addEventListener('click', e=>{ if(e.target === filmModal) filmModal.cl
     // Loading state
     btn.classList.add('sending');
     btn.disabled = true;
-    msg.textContent = 'Mengirim pesan...';
+    msg.textContent = 'Menyiapkan WhatsApp...';
     msg.className = 'form-message sending';
 
-    try{
-      const formData = new FormData(form);
-      const resp = await fetch(form.action, {method:'POST', body:formData, headers:{'Accept':'application/json'}});
-      if(resp.ok){
-        msg.textContent = `Terima kasih, ${nama}! Pesan terkirim ke sendriya072@gmail.com ✨`;
-        msg.className = 'form-message ok';
-        form.reset();
-        form.querySelectorAll('input, textarea').forEach(el=> el.classList.remove('has-value'));
-        confettiBurst(btn);
-      }else{
-        throw new Error('Network response was not ok');
-      }
-    }catch(err){
-      // Fallback: still show success (FormSubmit handles email in background)
-      msg.textContent = `Terima kasih, ${nama}! Pesan terkirim — cek email kamu 📬`;
+    // Build WhatsApp deep link
+    const phone = '6285212114058'; // 085212114058 -> 6285212114058
+    const text = `Halo, saya ${nama} (${kontak})\n\n${pesan}`;
+    const url = `https://wa.me/${phone}?text=${encodeURIComponent(text)}`;
+
+    // Small delay for UX then open
+    setTimeout(()=>{
+      window.open(url, '_blank', 'noopener,noreferrer');
+      msg.textContent = `WhatsApp dibuka — pesan siap dikirim ke 0852-1211-4058 ✨`;
       msg.className = 'form-message ok';
+      confettiBurst(btn);
       form.reset();
       form.querySelectorAll('input, textarea').forEach(el=> el.classList.remove('has-value'));
-    }finally{
       btn.classList.remove('sending');
       btn.disabled = false;
-    }
+    }, 600);
   });
 
   function shakeForm(){

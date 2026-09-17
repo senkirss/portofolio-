@@ -368,10 +368,7 @@
             <li><strong>Email</strong><span><a href="mailto:sendriya072@gmail.com">sendriya072@gmail.com</a></span></li>
           </ul>
         </div>
-        <form id="contactForm" class="reveal contact-form" novalidate action="https://formsubmit.co/sendriya072@gmail.com" method="POST">
-          <input type="hidden" name="_next" value="https://senkirss.github.io/portofolio-/#kontak" />
-          <input type="hidden" name="_captcha" value="false" />
-          <input type="hidden" name="_template" value="table" />
+        <form id="contactForm" class="reveal contact-form" novalidate>
           <div class="form-group">
             <label for="fNama">
               <span class="label-text">Nama</span>
@@ -384,11 +381,11 @@
           </div>
           <div class="form-group">
             <label for="fEmail">
-              <span class="label-text">Email</span>
+              <span class="label-text">Email / Kontak</span>
               <span class="label-icon">✉️</span>
             </label>
             <div class="input-wrapper">
-              <input type="email" id="fEmail" name="email" placeholder=" " required autocomplete="email" />
+              <input type="text" id="fEmail" name="contact" placeholder=" " required autocomplete="email" />
               <span class="input-border"></span>
             </div>
           </div>
@@ -404,10 +401,11 @@
           </div>
           <p id="formMsg" class="form-message"></p>
           <button type="submit" class="btn btn-submit">
-            <span class="btn-text">Kirim Pesan</span>
-            <span class="btn-icon">→</span>
+            <span class="btn-text">Kirim ke WhatsApp</span>
+            <span class="btn-icon">📱</span>
             <span class="btn-loader"></span>
           </button>
+          <p class="form-hint">Membuka WhatsApp dengan pesan siap kirim ke 0852-1211-4058</p>
         </form>
       </div>
     </section>
