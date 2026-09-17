@@ -247,6 +247,92 @@ function animateCount(el){
   });
 })();
 
+// 5b. REEL sinematik — Pendidikan (sama seperti Data Diri)
+(function eduReel(){
+  const el = document.getElementById('eduScroll');
+  const vp = document.getElementById('eduViewport');
+  const prog = document.getElementById('eduProg');
+  const curEl = document.getElementById('eduCurrent');
+  const prev = document.getElementById('eduPrev');
+  const next = document.getElementById('eduNext');
+  if(!el) return;
+  const cards = [...el.querySelectorAll('.trip-card')];
+
+  function update(){
+    const max = el.scrollWidth - el.clientWidth;
+    const p = max>0 ? el.scrollLeft / max : 0;
+    if(prog) prog.style.width = (p*100).toFixed(2)+'%';
+    const c = el.getBoundingClientRect().left + el.clientWidth/2;
+    let best=null, bestDist=Infinity, idx=0;
+    cards.forEach((card,i)=>{
+      const r = card.getBoundingClientRect();
+      const mid = r.left + r.width/2;
+      const d = Math.abs(mid - c);
+      if(d < bestDist){ bestDist=d; best=card; idx=i; }
+    });
+    cards.forEach(c=> c.classList.toggle('active', c===best));
+    if(curEl) curEl.textContent = String(idx+1).padStart(2,'0');
+    if(prev) prev.disabled = el.scrollLeft < 8;
+    if(next) next.disabled = el.scrollLeft > max - 8;
+    const leftF = document.querySelector('#eduViewport .reel-fade.left');
+    const rightF = document.querySelector('#eduViewport .reel-fade.right');
+    if(leftF) leftF.style.opacity = el.scrollLeft < 10 ? '0' : '1';
+    if(rightF) rightF.style.opacity = el.scrollLeft > max-10 ? '0' : '1';
+  }
+  el.addEventListener('scroll', update, {passive:true});
+  window.addEventListener('resize', update);
+  update();
+
+  function go(dir){
+    const w = cards[0].offsetWidth + 22;
+    el.scrollBy({left: w*dir, behavior:'smooth'});
+  }
+  prev?.addEventListener('click', ()=> go(-1));
+  next?.addEventListener('click', ()=> go(1));
+
+  el.addEventListener('wheel', e=>{
+    if(Math.abs(e.deltaX) < Math.abs(e.deltaY)){
+      el.scrollLeft += e.deltaY;
+      e.preventDefault();
+    }
+  }, {passive:false});
+
+  let down=false, startX=0, startL=0, vel=0, lastX=0, lastT=0, raf=null;
+  el.addEventListener('pointerdown', e=>{
+    down=true; vp?.classList.add('dragging');
+    startX=e.clientX; startL=el.scrollLeft;
+    vel=0; lastX=e.clientX; lastT=performance.now();
+    el.setPointerCapture(e.pointerId);
+    if(raf) cancelAnimationFrame(raf);
+  });
+  el.addEventListener('pointermove', e=>{
+    if(!down) return;
+    const dx = e.clientX - startX;
+    el.scrollLeft = startL - dx;
+    const now=performance.now(), dt=now-lastT;
+    if(dt>0) vel = (e.clientX - lastX)/dt;
+    lastX=e.clientX; lastT=now;
+  });
+  function stop(){
+    if(!down) return;
+    down=false; vp?.classList.remove('dragging');
+    let v = vel*14;
+    (function inertia(){
+      if(Math.abs(v) < 0.3) return;
+      el.scrollLeft -= v;
+      v *= 0.92;
+      raf = requestAnimationFrame(inertia);
+    })();
+  }
+  ['pointerup','pointercancel','pointerleave'].forEach(ev=> el.addEventListener(ev, stop));
+
+  el.setAttribute('tabindex','0');
+  el.addEventListener('keydown', e=>{
+    if(e.key==='ArrowRight') { e.preventDefault(); go(1); }
+    if(e.key==='ArrowLeft') { e.preventDefault(); go(-1); }
+  });
+})();
+
 // 6. Filter karya
 document.querySelectorAll('.chip').forEach(btn=>{
   btn.addEventListener('click', ()=>{

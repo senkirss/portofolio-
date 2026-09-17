@@ -227,31 +227,49 @@
         <p class="label reveal">03 — Pendidikan & Keahlian</p>
         <h2 class="big-serif reveal">Basecamp Saya</h2>
         <p class="head-desc reveal">Seperti kamp Whichaway & Echo — kecil, hangat, dan dirancang untuk bertahan. Ini fondasi tempat saya bertumbuh.</p>
-        <div class="camp-grid">
-          <article class="camp-card reveal">
-            <img src="assets/MAN%2013%20JAKARTA.jpg" alt="MAN 13 - Foto Pramuka" style="object-position:top center;" />
-            <div class="camp-body">
-              <h3>MAN 13 Jakarta Selatan</h3>
-              <p>Pendidikan menengah — disiplin, nilai agama, dan akademik yang seimbang.</p>
-              <span class="coord">[ Pendidikan Terakhir ]</span>
+        <div class="reel-wrap">
+          <div class="reel-viewport" id="eduViewport">
+            <div class="h-scroll" id="eduScroll">
+              <article class="trip-card reveal" data-index="0">
+                <div class="card-media"><img src="assets/MAN%2013%20JAKARTA.jpg" alt="MAN 13 - Foto Pramuka" style="object-position:top center;" /><span class="card-num">01</span></div>
+                <div class="trip-body">
+                  <p class="trip-tag">Pendidikan Terakhir</p>
+                  <h3>MAN 13 Jakarta Selatan</h3>
+                  <p>Pendidikan menengah — disiplin, nilai agama, dan akademik yang seimbang.</p>
+                  <span class="trip-meta">Alumni • Lulus</span>
+                </div>
+              </article>
+              <article class="trip-card reveal" data-index="1">
+                <div class="card-media"><img src="assets/image.png" alt="Kelas 1CC5" /><span class="card-num">02</span></div>
+                <div class="trip-body">
+                  <p class="trip-tag">Basecamp Aktif</p>
+                  <h3>Kelas 1CC5</h3>
+                  <p>Sekarang — mendalami komputasi, logika, dan kerja tim lewat proyek nyata.</p>
+                  <span class="trip-meta">CCIT-FTUI • Semester Awal</span>
+                </div>
+              </article>
+              <article class="trip-card reveal" data-index="2">
+                <div class="card-media"><img src="https://images.unsplash.com/photo-1519389950473-47ba0277781c?q=80&w=900&auto=format&fit=crop" alt="Skill" /><span class="card-num">03</span></div>
+                <div class="trip-body">
+                  <p class="trip-tag">Skill Set</p>
+                  <h3>HTML • CSS • JS</h3>
+                  <p>Senjata utama — membangun website native yang cepat dan elegan dari nol.</p>
+                  <span class="trip-meta">Native Stack • 100% Vanilla</span>
+                </div>
+              </article>
             </div>
-          </article>
-          <article class="camp-card reveal">
-            <img src="assets/image.png" alt="Kelas 1CC5" />
-            <div class="camp-body">
-              <h3>Kelas 1CC5</h3>
-              <p>Sekarang — mendalami komputasi, logika, dan kerja tim lewat proyek nyata.</p>
-              <span class="coord">[ Basecamp Aktif ]</span>
-            </div>
-          </article>
-          <article class="camp-card reveal">
-            <img src="https://images.unsplash.com/photo-1519389950473-47ba0277781c?q=80&w=900&auto=format&fit=crop" alt="Skill" />
-            <div class="camp-body">
-              <h3>HTML • CSS • JS</h3>
-              <p>Senjata utama — membangun website native yang cepat dan elegan dari nol.</p>
-              <span class="coord">[ Skill Set ]</span>
-            </div>
-          </article>
+          </div>
+          <div class="reel-fade left"></div>
+          <div class="reel-fade right"></div>
+        </div>
+        <div class="container reel-controls">
+          <div class="reel-left">
+            <button class="reel-btn" id="eduPrev" aria-label="Sebelumnya">‹</button>
+            <button class="reel-btn" id="eduNext" aria-label="Selanjutnya">›</button>
+            <span class="reel-counter"><span id="eduCurrent">01</span> / 03</span>
+          </div>
+          <div class="reel-progress"><div id="eduProg"></div></div>
+          <span class="reel-hint">drag • scroll • geser</span>
         </div>
 
         <!-- skill bars -->
