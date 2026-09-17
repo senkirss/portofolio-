@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Rasendriya Muhammad Adisanto — Portofolio</title>
+  <meta name="description" content="Portofolio Rasendriya Muhammad Adisanto, Kelas 1CC5. Terinspirasi oleh White Desert — luxury, tenang, dan eksploratif." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,300;1,9..144,400&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- GERBANG TURING-EDU : wajib main sebelum masuk portofolio -->
+  <div id="turingGate">
+    <div class="turing-card">
+      <div class="turing-head">
+        <p class="turing-kicker">Tugas Mandiri: Merancang Cetak Biru “Turing-Edu”</p>
+        <h2>Game Matematika <em>Uji Turing</em></h2>
+        <p class="turing-desc">Selesaikan soal penjumlahan & perkalian, lalu tebak: soal ini dibuat oleh <strong>🤖 Bot Komputer (AI)</strong> atau <strong>🧑‍🏫 Guru Sungguhan (Manusia)</strong>? Selesaikan 5 ronde untuk membuka portofolio.</p>
+      </div>
+      <div class="turing-cols">
+        <aside class="turing-info">
+          <h4>📌 Objektif Tugas</h4>
+          <p>Wireframe game edukasi matematika yang menggabungkan misteri Uji Turing.</p>
+          <h4>🎮 Mekanika Wajib</h4>
+          <p>1. Jawab soal matematika.<br />2. Setiap jawaban <strong>langsung dinotifikasi</strong> siapa pembuatnya (AI / Manusia).<br />3. Di akhir level, tebak asal soal untuk bonus Turing.</p>
+          <h4>📦 Output</h4>
+          <p>Wireframe UI ini + paragraf umpan balik di bawah arena.</p>
+          <div class="turing-legend">
+            <span class="pill ai">🤖 = AI / Bot</span>
+            <span class="pill human">🧑‍🏫 = Manusia / Guru</span>
+          </div>
+        </aside>
+        <div class="turing-arena">
+          <div class="turing-top">
+            <span id="turingRound">Ronde 1/5</span>
+            <div class="turing-progress"><div id="turingProg"></div></div>
+            <span id="turingScore">Skor: 0</span>
+          </div>
+          <div id="turingQBox">
+            <p id="turingQLabel">Soal Misteri #1</p>
+            <h3 id="turingQuestion">1 + 1 = ?</h3>
+            <div class="turing-row">
+              <input type="number" id="turingAnswer" placeholder="Jawaban..." />
+              <button id="turingCheck" class="btn btn-small">Jawab</button>
+            </div>
+            <div id="turingGuessBox" class="hidden">
+              <p>Menurutmu soal ini buatan siapa?</p>
+              <div class="turing-row">
+                <button class="guess-btn" data-guess="ai">🤖 Bot (AI)</button>
+                <button class="guess-btn" data-guess="manusia">🧑‍🏫 Guru (Manusia)</button>
+              </div>
+            </div>
+            <div id="turingNotif"></div>
+            <button id="turingNext" class="btn btn-dark hidden">Soal Berikutnya →</button>
+          </div>
+          <div id="turingFinal" class="hidden">
+            <h3 id="turingFinalTitle">Misi Selesai! 🎉</h3>
+            <p id="turingFinalScore"></p>
+            <p id="turingFinalTuring"></p>
+            <button id="turingEnter" class="btn">Masuk Portofolio →</button>
+            <button id="turingReplay" class="btn-play dark">↻ Main Lagi</button>
+          </div>
+          <p class="turing-feedback-info"><strong>Mekanisme umpan balik:</strong> setiap jawaban matematika langsung memicu notifikasi ganda — (1) benar/salah matematis beserta kunci jawaban, dan (2) identitas pembuat soal (AI/Manusia) beserta alasannya (gaya bahasa & pola angka); tebakan asal-soal lalu dinilai tepat/salah untuk melatih literasi Turing, dan skor akhir membuka akses portofolio.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Preloader -->
+  <div id="preloader">
+    <div class="pre-inner">
+      <div class="pre-logo">RMA<span>.</span></div>
+      <div class="pre-count"><span id="preNum">00</span>%</div>
+      <div class="pre-bar"><div id="preBarFill"></div></div>
+    </div>
+  </div>
+
+  <!-- Custom cursor dot -->
+  <div class="cursor" id="cursor"></div>
+
+  <!-- NAV -->
+  <header id="navbar">
+    <a href="#hero" class="brand">RMA<span>.</span></a>
+    <nav class="nav-links" id="navLinks">
+      <a href="#tentang">Tentang</a>
+      <a href="#data-diri">Profil</a>
+      <a href="#pendidikan">Pendidikan</a>
+      <a href="#karya">Karya</a>
+      <a href="#perjalanan">Perjalanan</a>
+    </nav>
+    <div class="nav-right">
+      <a href="#kontak" class="btn btn-small">Hubungi Saya</a>
+      <button id="burger" aria-label="Menu"><span></span><span></span><span></span></button>
+    </div>
+  </header>
+
+  <!-- Mobile menu -->
+  <div id="mobileMenu">
+    <a href="#tentang">Tentang</a>
+    <a href="#data-diri">Profil</a>
+    <a href="#pendidikan">Pendidikan</a>
+    <a href="#karya">Karya</a>
+    <a href="#perjalanan">Perjalanan</a>
+    <a href="#kontak" class="btn">Hubungi Saya</a>
+  </div>
+
+  <main>
+    <!-- HERO ala White Desert -->
+    <section id="hero">
+      <div class="hero-bg" id="heroBg">
+        <!-- Lapisan foto (fallback + efek Ken Burns selalu gerak meski offline) -->
+        <img src="https://images.unsplash.com/photo-1509316975850-ff9c5deb0cd9?q=80&w=2000&auto=format&fit=crop" alt="Hutan tenang" id="heroImg" class="hero-layer" data-depth="0.02" />
+        <!-- Lapisan video alam (bergerak realistis) -->
+        <video class="hero-layer hero-video" data-depth="0.04" autoplay muted loop playsinline preload="auto"
+          poster="https://images.unsplash.com/photo-1509316975850-ff9c5deb0cd9?q=80&w=2000&auto=format&fit=crop">
+          <source src="https://assets.mixkit.co/videos/preview/mixkit-forest-stream-in-the-sunlight-529-large.mp4" type="video/mp4" />
+          <source src="https://cdn.pixabay.com/video/2020/05/25/40130-424930032_large.mp4" type="video/mp4" />
+        </video>
+        <div class="hero-overlay"></div>
+        <div class="sun-glow" data-depth="0.06"></div>
+        <!-- Kabut berlapis yang bergerak -->
+        <div class="mist mist-a"></div>
+        <div class="mist mist-b"></div>
+        <div class="mist mist-c"></div>
+        <!-- Partikel cahaya / daun melayang -->
+        <canvas id="particles"></canvas>
+        <div class="hero-grain"></div>
+        <div class="hero-vignette"></div>
+      </div>
+
+      <div class="hero-top-label reveal">
+        <span class="line"></span>
+        <p>Portofolio — Kelas 1CC5 — Jakarta Selatan</p>
+        <span class="line"></span>
+      </div>
+
+      <div class="hero-center">
+        <p class="hero-eyebrow reveal">Halo, saya</p>
+        <h1 class="hero-title">
+          <span class="ht-line reveal">RASENDRIYA</span>
+          <span class="ht-line italic reveal">Muhammad Adisanto</span>
+        </h1>
+        <p class="hero-sub reveal">Mahasiswa yang tenang, eksploratif, dan berakar —<br />terinspirasi oleh alam, tumbuh lewat proses.</p>
+        <div class="hero-cta reveal">
+          <a href="#karya" class="btn btn-light">Lihat Karya</a>
+          <button class="btn-play" id="playBtn">
+            <span class="play-circle">▶</span> Tonton Film
+          </button>
+        </div>
+      </div>
+
+      <div class="hero-bottom">
+        <div class="hero-coord">6°18' S — 106°49' E<br /><strong>Jagakarsa, Jakarta</strong></div>
+        <div class="scroll-hint"><span></span>Scroll</div>
+        <div class="hero-side">
+          <div class="hero-coord right">MAN 13<br /><strong>Jakarta Selatan</strong></div>
+          <button id="motionToggle" title="Jeda / putar animasi latar">❚❚ Latar</button>
+        </div>
+      </div>
+
+      <!-- Video modal -->
+      <div id="filmModal">
+        <div class="film-box">
+          <button id="closeFilm">✕</button>
+          <div class="film-placeholder">
+            <h3>Showreel — Segera Hadir</h3>
+            <p>Ganti dengan link YouTube / video perkenalan kamu di sini.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Marquee -->
+    <div class="marquee">
+      <div class="marquee-track">
+        <span>Rasendriya Muhammad Adisanto — 1CC5 — Casamora Jagakarsa — MAN 13 Jakarta Selatan —&nbsp;</span>
+        <span>Rasendriya Muhammad Adisanto — 1CC5 — Casamora Jagakarsa — MAN 13 Jakarta Selatan —&nbsp;</span>
+      </div>
+    </div>
+
+    <!-- INTRO / TENTANG -->
+    <section id="tentang" class="section cream">
+      <div class="container split">
+        <div class="split-left">
+          <p class="label reveal">01 — Tentang Saya</p>
+          <h2 class="big-serif reveal">Tenang di luar,<br /><em>berani menjelajah</em><br />ke dalam.</h2>
+        </div>
+        <div class="split-right">
+          <p class="lead reveal">Saya <strong>Rasendriya Muhammad Adisanto</strong>, mahasiswa kelas <strong>1CC5</strong> yang tinggal di <strong>Perumahan Casamora, Jagakarsa</strong>. Lulusan <strong>MAN 13 Jakarta Selatan</strong>.</p>
+          <p class="reveal">Seperti White Desert yang membawa tamunya ke tempat paling sunyi di bumi untuk menemukan kembali diri sendiri — saya percaya proses belajar terbaik lahir dari ketenangan, ketekunan, dan keberanian mencoba hal baru.</p>
+          <div class="stats">
+            <div class="stat reveal"><strong><span class="counter" data-target="13">0</span></strong><span>MAN 13 Jakarta<br />Sekolah Asal</span></div>
+            <div class="stat reveal"><strong><span class="counter" data-target="5">0</span>+</strong><span>Proyek & Tugas<br />Kreatif</span></div>
+            <div class="stat reveal"><strong>1CC5</strong><span>Kelas<br />Saat Ini</span></div>
+          </div>
+          <a href="#data-diri" class="link-arrow reveal">Jelajahi profil saya →</a>
+        </div>
+      </div>
+      <div class="container img-duo">
+        <img class="reveal-img" src="https://images.unsplash.com/photo-1441974231531-c6227db76b6e?q=80&w=1200&auto=format&fit=crop" alt="Hutan" />
+        <img class="reveal-img tall" src="https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?q=80&w=1200&auto=format&fit=crop" alt="Bukit berkabut" />
+      </div>
+    </section>
+
+    <!-- DATA DIRI ala Our Trips -->
+    <section id="data-diri" class="section dark">
+      <div class="container">
+        <p class="label light reveal">02 — Data Diri</p>
+        <div class="section-head">
+          <h2 class="big-serif light reveal">Profil Singkat</h2>
+          <p class="head-desc reveal">Geser ke samping — seperti memilih ekspedisi di White Desert. Setiap kartu adalah bagian dari cerita saya.</p>
+        </div>
+      </div>
+      <div class="h-scroll" id="hScroll">
+        <article class="trip-card reveal">
+          <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=800&auto=format&fit=crop" alt="Nama" />
+          <div class="trip-body">
+            <p class="trip-tag">Identitas</p>
+            <h3>Nama Lengkap</h3>
+            <p>Rasendriya Muhammad Adisanto</p>
+            <span class="trip-meta">1CC5 • Mahasiswa</span>
+          </div>
+        </article>
+        <article class="trip-card reveal">
+          <img src="https://images.unsplash.com/photo-1523050854058-8df90110c9f1?q=80&w=800&auto=format&fit=crop" alt="Kelas" />
+          <div class="trip-body">
+            <p class="trip-tag">Akademik</p>
+            <h3>Kelas 1CC5</h3>
+            <p>Fokus pada dasar komputasi, kolaborasi, dan disiplin belajar.</p>
+            <span class="trip-meta">Aktif • Semester Awal</span>
+          </div>
+        </article>
+        <article class="trip-card reveal">
+          <img src="https://images.unsplash.com/photo-1564013799919-ab600027ffc6?q=80&w=800&auto=format&fit=crop" alt="Alamat" />
+          <div class="trip-body">
+            <p class="trip-tag">Domisili</p>
+            <h3>Casamora Jagakarsa</h3>
+            <p>Perumahan Casamora, Jagakarsa, Jakarta Selatan.</p>
+            <span class="trip-meta">6°18' S, 106°49' E</span>
+          </div>
+        </article>
+        <article class="trip-card reveal">
+          <img src="https://images.unsplash.com/photo-1541339907198-e08756dedf3f?q=80&w=800&auto=format&fit=crop" alt="Pendidikan" />
+          <div class="trip-body">
+            <p class="trip-tag">Pendidikan Terakhir</p>
+            <h3>MAN 13 Jakarta Selatan</h3>
+            <p>Madrasah Aliyah Negeri 13 Jakarta Selatan — fondasi akademik & karakter.</p>
+            <span class="trip-meta">Alumni • Lulus</span>
+          </div>
+        </article>
+      </div>
+      <p class="drag-hint">← Geser / drag →</p>
+    </section>
+
+    <!-- QUOTE -->
+    <section class="quote-section">
+      <div class="container narrow">
+        <p class="quote-mark reveal">“</p>
+        <blockquote class="reveal">Ketenangan bukan berarti diam. Ia adalah cara saya mendengar dunia lebih jernih, lalu bergerak dengan yakin.</blockquote>
+        <cite class="reveal">— Rasendriya Muhammad Adisanto</cite>
+      </div>
+    </section>
+
+    <!-- PENDIDIKAN ala Our Camps -->
+    <section id="pendidikan" class="section cream">
+      <div class="container">
+        <p class="label reveal">03 — Pendidikan & Keahlian</p>
+        <h2 class="big-serif reveal">Basecamp Saya</h2>
+        <p class="head-desc reveal">Seperti kamp Whichaway & Echo — kecil, hangat, dan dirancang untuk bertahan. Ini fondasi tempat saya bertumbuh.</p>
+        <div class="camp-grid">
+          <article class="camp-card reveal">
+            <img src="assets/Screenshot%202026-08-26%20131209.png" alt="MAN 13 - Foto Pramuka" style="object-position:top center;" />
+            <div class="camp-body">
+              <h3>MAN 13 Jakarta Selatan</h3>
+              <p>Pendidikan menengah — disiplin, nilai agama, dan akademik yang seimbang.</p>
+              <span class="coord">[ Pendidikan Terakhir ]</span>
+            </div>
+          </article>
+          <article class="camp-card reveal">
+            <img src="https://images.unsplash.com/photo-1517180102446-f3ece451e9d8?q=80&w=900&auto=format&fit=crop" alt="Kelas 1CC5" />
+            <div class="camp-body">
+              <h3>Kelas 1CC5</h3>
+              <p>Sekarang — mendalami komputasi, logika, dan kerja tim lewat proyek nyata.</p>
+              <span class="coord">[ Basecamp Aktif ]</span>
+            </div>
+          </article>
+          <article class="camp-card reveal">
+            <img src="https://images.unsplash.com/photo-1519389950473-47ba0277781c?q=80&w=900&auto=format&fit=crop" alt="Skill" />
+            <div class="camp-body">
+              <h3>HTML • CSS • JS</h3>
+              <p>Senjata utama — membangun website native yang cepat dan elegan dari nol.</p>
+              <span class="coord">[ Skill Set ]</span>
+            </div>
+          </article>
+        </div>
+
+        <!-- skill bars -->
+        <div class="skills">
+          <div class="skill reveal"><div class="skill-top"><span>HTML</span><span>90%</span></div><div class="bar"><div class="fill" data-w="90%"></div></div></div>
+          <div class="skill reveal"><div class="skill-top"><span>CSS</span><span>85%</span></div><div class="bar"><div class="fill" data-w="85%"></div></div></div>
+          <div class="skill reveal"><div class="skill-top"><span>JavaScript</span><span>75%</span></div><div class="bar"><div class="fill" data-w="75%"></div></div></div>
+          <div class="skill reveal"><div class="skill-top"><span>Desain / UI</span><span>80%</span></div><div class="bar"><div class="fill" data-w="80%"></div></div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- KARYA -->
+    <section id="karya" class="section sage">
+      <div class="container">
+        <p class="label reveal">04 — Karya Pilihan</p>
+        <div class="section-head">
+          <h2 class="big-serif reveal">Ekspedisi Mini</h2>
+          <div class="filter reveal">
+            <button class="chip active" data-filter="all">Semua</button>
+            <button class="chip" data-filter="web">Web</button>
+            <button class="chip" data-filter="desain">Desain</button>
+            <button class="chip" data-filter="tugas">Tugas</button>
+          </div>
+        </div>
+        <div class="work-grid" id="workGrid">
+          <article class="work-card reveal" data-cat="web">
+            <img src="https://images.unsplash.com/photo-1467232004584-a241de8bcf5d?q=80&w=900&auto=format&fit=crop" alt="Web 1" />
+            <div class="work-body"><h3>Landing Page Alam</h3><p>HTML • CSS • JS — layout fullscreen ala White Desert.</p></div>
+          </article>
+          <article class="work-card reveal" data-cat="tugas">
+            <img src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?q=80&w=900&auto=format&fit=crop" alt="Tugas" />
+            <div class="work-body"><h3>Tugas Kelas 1CC5</h3><p>Dokumentasi & presentasi — rapi dan terstruktur.</p></div>
+          </article>
+          <article class="work-card reveal" data-cat="desain">
+            <img src="https://images.unsplash.com/photo-1561070791-2526d30994b5?q=80&w=900&auto=format&fit=crop" alt="Desain" />
+            <div class="work-body"><h3>Poster & Layout</h3><p>Eksplorasi tipografi serif + palet earthy.</p></div>
+          </article>
+          <article class="work-card reveal" data-cat="web">
+            <img src="https://images.unsplash.com/photo-1547658719-da2b51169166?q=80&w=900&auto=format&fit=crop" alt="Web 2" />
+            <div class="work-body"><h3>Portofolio Native</h3><p>Website ini — 100% HTML, CSS, JS tanpa framework.</p></div>
+          </article>
+          <article class="work-card reveal" data-cat="desain">
+            <img src="https://images.unsplash.com/photo-1493421419110-74f4e85ba126?q=80&w=900&auto=format&fit=crop" alt="Foto" />
+            <div class="work-body"><h3>Fotografi Jagakarsa</h3><p>Potret tenang sekitar Casamora.</p></div>
+          </article>
+          <article class="work-card reveal" data-cat="tugas">
+            <img src="https://images.unsplash.com/photo-1434030216411-0b793f4b4173?q=80&w=900&auto=format&fit=crop" alt="Catatan" />
+            <div class="work-body"><h3>Catatan Belajar</h3><p>Rangkuman materi komputasi dasar.</p></div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- PERJALANAN ala flight path -->
+    <section id="perjalanan" class="section dark">
+      <div class="container split">
+        <div class="split-left">
+          <p class="label light reveal">05 — Perjalanan</p>
+          <h2 class="big-serif light reveal">Dari MAN 13,<br />Menuju <em>lebih jauh.</em></h2>
+          <div class="route reveal">
+            <div class="route-point"><strong>1 — MAN 13 Jakarta</strong><span>MAN 13 Jakarta Selatan — Titik Awal</span></div>
+            <div class="route-line"></div>
+            <div class="route-point"><strong>2 — CCIT-FTUI</strong><span>CCIT Fakultas Teknik UI — Pendalaman IT</span></div>
+            <div class="route-line"></div>
+            <div class="route-point"><strong>3 — Kelas 1CC5</strong><span>Sekarang — Ekspedisi Berjalan</span></div>
+          </div>
+        </div>
+        <div class="split-right">
+          <div class="timeline">
+            <div class="t-item reveal"><span class="t-year">01 — Awal</span><h4>MAN 13 Jakarta</h4><p>Lulus dari MAN 13 Jakarta Selatan dengan fondasi akademik, disiplin, dan karakter yang kuat sebagai bekal awal karier.</p></div>
+            <div class="t-item reveal"><span class="t-year">02 — Lanjutan</span><h4>CCIT-FTUI</h4><p>Melanjutkan ke CCIT-FTUI (Fakultas Teknik Universitas Indonesia) untuk mendalami ilmu komputer dan teknologi informasi secara praktis.</p></div>
+            <div class="t-item reveal"><span class="t-year">03 — Kini</span><h4>Kelas 1CC5</h4><p>Saat ini berada di kelas 1CC5 — fokus pada komputasi dasar, kolaborasi tim, dan membangun portofolio web native dengan HTML, CSS, dan JS.</p></div>
+          </div>
+          <div class="fact-box reveal">
+            <div><strong>Tahap 01</strong><span>MAN 13 Jakarta — Fondasi</span></div>
+            <div><strong>Tahap 02</strong><span>CCIT-FTUI — Pendalaman IT</span></div>
+            <div><strong>Tahap 03</strong><span>Kelas 1CC5 — Praktik & Karya 🔥</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- KONTAK ala Enquire -->
+    <section id="kontak" class="section cream contact">
+      <div class="container split">
+        <div class="split-left">
+          <p class="label reveal">06 — Kontak</p>
+          <h2 class="big-serif reveal">Mulai <em>percakapan.</em></h2>
+          <p class="reveal">Tertarik kolaborasi, tugas kelompok, atau sekadar menyapa? Kirim pesan — saya akan membalas secepat mungkin.</p>
+          <ul class="contact-list reveal">
+            <li><strong>Nama</strong><span>Rasendriya Muhammad Adisanto</span></li>
+            <li><strong>Alamat</strong><span>Perumahan Casamora, Jagakarsa</span></li>
+            <li><strong>Pendidikan</strong><span>MAN 13 Jakarta Selatan → 1CC5</span></li>
+          </ul>
+        </div>
+        <form id="contactForm" class="reveal" novalidate>
+          <label>Nama<input type="text" id="fNama" placeholder="Nama kamu" required /></label>
+          <label>Email<input type="email" id="fEmail" placeholder="email@contoh.com" required /></label>
+          <label>Pesan<textarea id="fPesan" rows="5" placeholder="Halo Rasendriya, saya ingin..." required></textarea></label>
+          <p id="formMsg"></p>
+          <button type="submit" class="btn btn-dark">Kirim Pesan →</button>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container foot-grid">
+      <div><h3>RMA<span>.</span></h3><p>Portofolio native — HTML, CSS, JS.<br />Terinspirasi oleh white-desert.com</p></div>
+      <div><h4>Navigasi</h4><a href="#tentang">Tentang</a><a href="#karya">Karya</a><a href="#kontak">Kontak</a></div>
+      <div><h4>Profil</h4><span>Rasendriya M. Adisanto</span><span>Kelas 1CC5</span><span>Casamora Jagakarsa</span></div>
+      <div><h4>Palet</h4><div class="palette"><i style="background:#6E3511"></i><i style="background:#91AC67"></i><i style="background:#597928"></i><i style="background:#FCECD8"></i></div><span>#6E3511 • #91AC67<br />#597928 • #FCECD8</span></div>
+    </div>
+    <div class="foot-bottom"><span>© 2026 Rasendriya Muhammad Adisanto</span><button id="toTop">↑ Kembali ke atas</button></div>
+  </footer>
+
+  <script src="script.js"></script>
+  <script src="turing-edu.js"></script>
+</body>
+</html>
