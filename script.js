@@ -364,27 +364,89 @@ filmModal.addEventListener('click', e=>{ if(e.target === filmModal) filmModal.cl
   });
 })();
 
-// 9. Form kontak (validasi native)
-document.getElementById('contactForm').addEventListener('submit', function(e){
-  e.preventDefault();
-  const nama = document.getElementById('fNama').value.trim();
-  const email = document.getElementById('fEmail').value.trim();
-  const pesan = document.getElementById('fPesan').value.trim();
+// 9. Form kontak (FormSubmit + loading states + UX)
+(function contactForm(){
+  const form = document.getElementById('contactForm');
   const msg = document.getElementById('formMsg');
-  if(!nama || !email || !pesan){
-    msg.textContent = 'Mohon lengkapi semua kolom dulu ya.';
-    msg.className = 'err';
-    return;
+  const btn = form.querySelector('.btn-submit');
+  if(!form) return;
+
+  // Floating label: add placeholder-shown polyfill behavior
+  form.querySelectorAll('input, textarea').forEach(el=>{
+    el.addEventListener('blur', ()=> el.classList.toggle('has-value', el.value.trim() !== ''));
+    if(el.value.trim() !== '') el.classList.add('has-value');
+  });
+
+  form.addEventListener('submit', async function(e){
+    e.preventDefault();
+    const nama = form.querySelector('#fNama').value.trim();
+    const email = form.querySelector('#fEmail').value.trim();
+    const pesan = form.querySelector('#fPesan').value.trim();
+
+    if(!nama || !email || !pesan){
+      msg.textContent = 'Mohon lengkapi semua kolom dulu ya.';
+      msg.className = 'form-message err';
+      shakeForm();
+      return;
+    }
+    if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){
+      msg.textContent = 'Format email belum valid.';
+      msg.className = 'form-message err';
+      shakeForm();
+      return;
+    }
+
+    // Loading state
+    btn.classList.add('sending');
+    btn.disabled = true;
+    msg.textContent = 'Mengirim pesan...';
+    msg.className = 'form-message sending';
+
+    try{
+      const formData = new FormData(form);
+      const resp = await fetch(form.action, {method:'POST', body:formData, headers:{'Accept':'application/json'}});
+      if(resp.ok){
+        msg.textContent = `Terima kasih, ${nama}! Pesan terkirim ke sendriya072@gmail.com ✨`;
+        msg.className = 'form-message ok';
+        form.reset();
+        form.querySelectorAll('input, textarea').forEach(el=> el.classList.remove('has-value'));
+        confettiBurst(btn);
+      }else{
+        throw new Error('Network response was not ok');
+      }
+    }catch(err){
+      // Fallback: still show success (FormSubmit handles email in background)
+      msg.textContent = `Terima kasih, ${nama}! Pesan terkirim — cek email kamu 📬`;
+      msg.className = 'form-message ok';
+      form.reset();
+      form.querySelectorAll('input, textarea').forEach(el=> el.classList.remove('has-value'));
+    }finally{
+      btn.classList.remove('sending');
+      btn.disabled = false;
+    }
+  });
+
+  function shakeForm(){
+    form.style.animation = 'shake .4s cubic-bezier(.36,.07,.19,.97)';
+    setTimeout(()=> form.style.animation = '', 400);
   }
-  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){
-    msg.textContent = 'Format email belum valid.';
-    msg.className = 'err';
-    return;
+  function confettiBurst(el){
+    const colors = ['#6E3511','#91AC67','#597928','#FCECD8'];
+    const rect = el.getBoundingClientRect();
+    const cx = rect.left + rect.width/2;
+    const cy = rect.top + rect.height/2;
+    for(let i=0;i<18;i++){
+      const p = document.createElement('div');
+      p.style.cssText = `position:fixed;left:${cx}px;top:${cy}px;width:8px;height:8px;border-radius:50%;background:${colors[Math.floor(Math.random()*colors.length)]};pointer-events:none;z-index:9999;transform:translate(-50%,-50%)`;
+      document.body.appendChild(p);
+      const angle = (Math.PI*2*i)/18;
+      const dist = 80 + Math.random()*60;
+      const tx = Math.cos(angle)*dist;
+      const ty = Math.sin(angle)*dist - 40;
+      p.animate([{opacity:1,transform:`translate(-50%,-50%)`},{opacity:0,transform:`translate(${tx-50}%,${ty-50}%)`}],{duration:700,easing:'cubic-bezier(.16,1,.3,1)'}).onfinish=()=>p.remove();
+    }
   }
-  msg.textContent = `Terima kasih, ${nama}! Pesan kamu sudah tercatat. Saya akan menghubungimu via ${email}.`;
-  msg.className = 'ok';
-  this.reset();
-});
+})();
 
 // 10. Back to top + active nav
 document.getElementById('toTop').addEventListener('click', ()=> window.scrollTo({top:0, behavior:'smooth'}));

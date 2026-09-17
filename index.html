@@ -364,14 +364,50 @@
             <li><strong>Nama</strong><span>Rasendriya Muhammad Adisanto</span></li>
             <li><strong>Alamat</strong><span>Perumahan Casamora, Jagakarsa</span></li>
             <li><strong>Pendidikan</strong><span>MAN 13 Jakarta Selatan → 1CC5</span></li>
+            <li><strong>WhatsApp</strong><span><a href="https://wa.me/6285212114058" target="_blank" rel="noopener">0852-1211-4058</a></span></li>
+            <li><strong>Email</strong><span><a href="mailto:sendriya072@gmail.com">sendriya072@gmail.com</a></span></li>
           </ul>
         </div>
-        <form id="contactForm" class="reveal" novalidate>
-          <label>Nama<input type="text" id="fNama" placeholder="Nama kamu" required /></label>
-          <label>Email<input type="email" id="fEmail" placeholder="email@contoh.com" required /></label>
-          <label>Pesan<textarea id="fPesan" rows="5" placeholder="Halo Rasendriya, saya ingin..." required></textarea></label>
-          <p id="formMsg"></p>
-          <button type="submit" class="btn btn-dark">Kirim Pesan →</button>
+        <form id="contactForm" class="reveal contact-form" novalidate action="https://formsubmit.co/sendriya072@gmail.com" method="POST">
+          <input type="hidden" name="_next" value="https://senkirss.github.io/portofolio-/#kontak" />
+          <input type="hidden" name="_captcha" value="false" />
+          <input type="hidden" name="_template" value="table" />
+          <div class="form-group">
+            <label for="fNama">
+              <span class="label-text">Nama</span>
+              <span class="label-icon">👤</span>
+            </label>
+            <div class="input-wrapper">
+              <input type="text" id="fNama" name="name" placeholder=" " required autocomplete="name" />
+              <span class="input-border"></span>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="fEmail">
+              <span class="label-text">Email</span>
+              <span class="label-icon">✉️</span>
+            </label>
+            <div class="input-wrapper">
+              <input type="email" id="fEmail" name="email" placeholder=" " required autocomplete="email" />
+              <span class="input-border"></span>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="fPesan">
+              <span class="label-text">Pesan</span>
+              <span class="label-icon">💬</span>
+            </label>
+            <div class="input-wrapper textarea-wrapper">
+              <textarea id="fPesan" name="message" rows="5" placeholder=" " required></textarea>
+              <span class="input-border"></span>
+            </div>
+          </div>
+          <p id="formMsg" class="form-message"></p>
+          <button type="submit" class="btn btn-submit">
+            <span class="btn-text">Kirim Pesan</span>
+            <span class="btn-icon">→</span>
+            <span class="btn-loader"></span>
+          </button>
         </form>
       </div>
     </section>
