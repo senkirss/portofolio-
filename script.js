@@ -154,6 +154,230 @@ document.getElementById('motionToggle')?.addEventListener('click', function(){
   if(v){ paused ? v.pause() : v.play?.().catch(()=>{}); }
 });
 
+// 2f. Signature animation — draw R + 5 waves + upward tail
+(function signatureAnim(){
+  const canvas = document.getElementById('signatureCanvas');
+  const info = document.querySelector('.signature-info');
+  if(!canvas || !info) return;
+
+  const ctx = canvas.getContext('2d');
+  let w=0, h=0, dpr=window.devicePixelRatio||1;
+  let animated=false, progress=0, rafId=null;
+
+  function resize(){
+    const rect = canvas.parentElement.getBoundingClientRect();
+    w = canvas.width = Math.floor(rect.width * dpr);
+    h = canvas.height = Math.floor(rect.height * dpr);
+    canvas.style.width = rect.width + 'px';
+    canvas.style.height = rect.height + 'px';
+    ctx.scale(dpr, dpr);
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
+  }
+  window.addEventListener('resize', resize);
+  resize();
+
+  // Build signature path: R + 5 waves + upward tail
+  function buildPath(){
+    const path = new Path2D();
+    const cw = canvas.width / dpr;
+    const ch = canvas.height / dpr;
+    const startX = cw * 0.12;
+    const baseline = ch * 0.68;
+    const waveAmp = 14;
+    const waveW = 32;
+    const Rheight = ch * 0.35;
+
+    // Letter R
+    // Vertical stem
+    path.moveTo(startX, baseline);
+    path.lineTo(startX, baseline - Rheight);
+    // Top curve of R
+    path.bezierCurveTo(
+      startX, baseline - Rheight - 10,
+      startX + 22, baseline - Rheight - 10,
+      startX + 22, baseline - Rheight * 0.55
+    );
+    // Middle bar
+    path.lineTo(startX + 22, baseline - Rheight * 0.55);
+    path.bezierCurveTo(
+      startX + 22, baseline - Rheight * 0.55 - 6,
+      startX + 14, baseline - Rheight * 0.55 - 12,
+      startX + 6, baseline - Rheight * 0.55 - 10
+    );
+    // Leg of R
+    path.moveTo(startX, baseline - Rheight * 0.55);
+    path.lineTo(startX + 26, baseline);
+    // End of R at right side
+    let x = startX + 30;
+
+    // 5 small waves
+    for(let i=0;i<5;i++){
+      const waveStartY = baseline - 6 + (i%2)*4;
+      path.moveTo(x, waveStartY);
+      path.bezierCurveTo(
+        x + waveW*0.25, waveStartY - waveAmp,
+        x + waveW*0.75, waveStartY + waveAmp,
+        x + waveW, waveStartY
+      );
+      x += waveW;
+    }
+
+    // Upward tail from last wave end
+    path.moveTo(x, baseline - 6);
+    path.bezierCurveTo(
+      x + 15, baseline - 6,
+      x + 25, baseline - 28,
+      x + 35, baseline - 42
+    );
+
+    return path;
+  }
+
+  const fullPath = buildPath();
+  const totalLen = getPathLength(fullPath);
+
+  // Helper to get path length
+  function getPathLength(path){
+    // Approximate by sampling
+    let len = 0;
+    const steps = 200;
+    let lastX=0, lastY=0, first=true;
+    for(let i=0;i<=steps;i++){
+      const t = i/steps;
+      const pt = getPointOnPath(path, t);
+      if(first){ lastX=pt.x; lastY=pt.y; first=false; continue; }
+      len += Math.hypot(pt.x-lastX, pt.y-lastY);
+      lastX=pt.x; lastY=pt.y;
+    }
+    return len;
+  }
+
+  function getPointOnPath(path, t){
+    // Use SVGPathSegList approximation via canvas
+    // Fallback: return rough point
+    const cw = canvas.width / dpr;
+    const ch = canvas.height / dpr;
+    const startX = cw * 0.12;
+    const baseline = ch * 0.68;
+    const Rheight = ch * 0.35;
+    const waveAmp = 14;
+    const waveW = 32;
+    const totalSegments = 1 + 5 + 1; // R + 5 waves + tail
+    const seg = Math.floor(t * totalSegments);
+    const localT = (t * totalSegments) - seg;
+    const xBase = startX + 30 + seg * waveW;
+    
+    if(seg === 0){
+      // R shape - simplified
+      if(localT < 0.33){
+        return {x: startX, y: baseline - localT * 3 * Rheight};
+      }else if(localT < 0.66){
+        const lt = (localT-0.33)/0.33;
+        return {x: startX + lt * 22, y: baseline - Rheight};
+      }else{
+        const lt = (localT-0.66)/0.34;
+        return {x: startX + 22 - lt * 16, y: baseline - Rheight + lt * (Rheight*0.45)};
+      }
+    }else if(seg <= 5){
+      // Waves
+      const waveX = startX + 30 + (seg-1)*waveW;
+      return {
+        x: waveX + localT * waveW,
+        y: baseline - 6 + waveAmp * Math.sin(localT * Math.PI * 2)
+      };
+    }else{
+      // Tail upward
+      const tailX = startX + 30 + 5*waveW;
+      return {
+        x: tailX + localT * 35,
+        y: baseline - 6 - localT * 36
+      };
+    }
+  }
+
+  function draw(prog){
+    const cw = canvas.width / dpr;
+    const ch = canvas.height / dpr;
+    ctx.clearRect(0,0,cw,ch);
+    ctx.strokeStyle = '#6E3511';
+    ctx.lineWidth = 2.5;
+    ctx.globalAlpha = 1;
+
+    // Draw path progressively
+    const steps = 300;
+    const drawLen = totalLen * prog;
+    let accum = 0;
+    let lastPt = null;
+    ctx.beginPath();
+    for(let i=0;i<=steps;i++){
+      const t = i/steps;
+      const pt = getPointOnPath(fullPath, t);
+      const segLen = lastPt ? Math.hypot(pt.x-lastPt.x, pt.y-lastPt.y) : 0;
+      accum += segLen;
+      if(accum > drawLen) break;
+      if(i===0) ctx.moveTo(pt.x, pt.y);
+      else ctx.lineTo(pt.x, pt.y);
+      lastPt = pt;
+    }
+    ctx.stroke();
+
+    // Draw moving dot at tip
+    if(prog > 0 && prog < 1){
+      const tipT = Math.min(1, prog + 0.001);
+      const tipPt = getPointOnPath(fullPath, tipT);
+      ctx.beginPath();
+      ctx.arc(tipPt.x, tipPt.y, 4, 0, Math.PI*2);
+      ctx.fillStyle = '#91AC67';
+      ctx.fill();
+      ctx.globalAlpha = 0.3;
+      ctx.beginPath();
+      ctx.arc(tipPt.x, tipPt.y, 10, 0, Math.PI*2);
+      ctx.fillStyle = '#91AC67';
+      ctx.fill();
+      ctx.globalAlpha = 1;
+    }
+  }
+
+  function animate(){
+    if(animated) return;
+    const observer = new IntersectionObserver((entries)=>{
+      entries.forEach(e=>{
+        if(e.isIntersecting && !animated){
+          animated = true;
+          observer.disconnect();
+          info.classList.add('reveal');
+          startDrawing();
+        }
+      });
+    },{threshold:0.3});
+    observer.observe(canvas.parentElement);
+  }
+
+  function startDrawing(){
+    const duration = 2800; // ms
+    const start = performance.now();
+    function frame(now){
+      const elapsed = now - start;
+      progress = Math.min(1, elapsed / duration);
+      // Easing
+      const eased = progress < 0.5 
+        ? 2 * progress * progress 
+        : 1 - Math.pow(-2 * progress + 2, 2) / 2;
+      draw(eased);
+      if(progress < 1){
+        rafId = requestAnimationFrame(frame);
+      }else{
+        // Keep final state
+        draw(1);
+      }
+    }
+    rafId = requestAnimationFrame(frame);
+  }
+
+  animate();
+})();
+
 // 3. Mobile menu
 const burger = document.getElementById('burger');
 const mobileMenu = document.getElementById('mobileMenu');
