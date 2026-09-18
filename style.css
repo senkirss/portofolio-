@@ -40,8 +40,10 @@ a{text-decoration:none;color:inherit}
 @media(hover:none){.cursor{display:none}}
 
 /* NAV */
-#navbar{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:18px 32px;transition:.35s;color:var(--cream)}
+#navbar{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:18px 32px;transition:background .35s,box-shadow .35s,padding .35s,color .35s,transform .45s cubic-bezier(.16,1,.3,1);color:var(--cream)}
 #navbar.scrolled{background:rgba(252,236,216,.92);backdrop-filter:blur(14px);color:var(--brown);box-shadow:0 8px 30px rgba(62,32,10,.12);padding:12px 32px}
+#navbar.nav-hidden{transform:translateY(-110%)}
+#scrollProgress{position:fixed;top:0;left:0;height:3px;width:0;background:linear-gradient(90deg,var(--olive),var(--sage));z-index:200;border-radius:0 3px 3px 0}
 .brand{font-family:var(--serif);font-size:1.8rem;font-weight:600}
 .brand span{color:var(--sage)}
 #navbar.scrolled .brand span{color:var(--olive)}
@@ -165,9 +167,12 @@ section.section-visible .signature-atmos{opacity:.03}
 .signature-canvas-wrap{flex:none;width:100%;max-width:480px;height:190px}
 #signatureCanvas{width:100%;height:100%;display:block}
 .signature-info{text-align:center}
-.signature-name{font-family:var(--serif);font-size:clamp(1.15rem,2.6vw,1.5rem);font-weight:400;color:var(--brown);margin-bottom:4px;line-height:1.3;opacity:0;transform:translateY(20px);transition:opacity .8s .4s cubic-bezier(.16,1,.3,1), transform .8s .4s cubic-bezier(.16,1,.3,1)}
+.signature-name-svg{opacity:0;transform:translateY(14px);transition:opacity .6s ease,transform .6s ease;max-width:520px;margin:0 auto}
+.signature-name-svg.visible{opacity:1;transform:none}
+#sigNameSvg{width:100%;height:auto;display:block;overflow:visible}
+.sig-name-text{font-family:var(--serif);font-size:31px;fill:var(--brown);fill-opacity:0;stroke:var(--brown);stroke-width:1.1;stroke-dasharray:var(--len,700);stroke-dashoffset:var(--len,700);transition:stroke-dashoffset 1.9s ease .1s, fill-opacity .9s ease 1.3s}
+.sig-name-text.drawn{stroke-dashoffset:0;fill-opacity:1}
 .signature-role{font-size:.82rem;letter-spacing:.15em;text-transform:uppercase;color:var(--olive);font-weight:700;opacity:0;transform:translateY(20px);transition:opacity .8s .55s cubic-bezier(.16,1,.3,1), transform .8s .55s cubic-bezier(.16,1,.3,1)}
-.signature-name.visible,
 .signature-role.visible,
 .signature-actions.visible{opacity:1;transform:none}
 .signature-actions{display:flex;align-items:center;justify-content:center;gap:10px;margin-top:10px;opacity:0;transform:translateY(20px);transition:opacity .8s .7s cubic-bezier(.16,1,.3,1), transform .8s .7s cubic-bezier(.16,1,.3,1)}
@@ -182,7 +187,7 @@ section.section-visible .signature-atmos{opacity:.03}
 
 /* ===== REEL Sinematik — Data Diri ===== */
 #data-diri{padding-bottom:40px}
-.reel-wrap{position:relative;margin-top:36px}
+.reel-wrap{position:relative;margin-top:36px;z-index:3}
 .reel-viewport{overflow:hidden;cursor:grab}
 .reel-viewport.dragging{cursor:grabbing}
 .h-scroll{display:flex;gap:22px;overflow-x:auto;padding:14px 32px 34px;scroll-snap-type:x mandatory;scrollbar-width:none;scroll-padding:0 32px;scroll-behavior:smooth}
@@ -335,6 +340,14 @@ footer{background:var(--brown-dark);color:var(--cream);padding:60px 0 0}
   20%,60%{transform:translateX(-8px)}
   40%,80%{transform:translateX(8px)}
 }
+
+/* Section edge blending — softens slide-to-slide cuts */
+.section::before{content:"";position:absolute;top:0;left:0;right:0;height:90px;z-index:2;pointer-events:none;background:linear-gradient(180deg,rgba(110,53,17,.08),transparent)}
+.section.dark::before{background:linear-gradient(180deg,rgba(0,0,0,.28),transparent)}
+.section.sage::before{background:linear-gradient(180deg,rgba(62,32,10,.10),transparent)}
+#hero::before,.signature-section::before{display:none}
+/* Content parallax depth (value set by JS) */
+main section > .container,main section > .reel-wrap,main section > .reel-controls,main section > .signature-wrap{transform:translateY(var(--px,0px));will-change:transform}
 
 /* Section entrance — subtle cinematic */
 section{opacity:1;transform:none;transition:opacity 1s cubic-bezier(.16,1,.3,1), transform 1s cubic-bezier(.16,1,.3,1)}

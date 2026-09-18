@@ -270,10 +270,6 @@ document.getElementById('motionToggle')?.addEventListener('click', function(){
         if(e.isIntersecting && !animated){
           animated = true;
           observer.disconnect();
-          info.classList.add('reveal');
-          // Pastikan teks selalu tampil walau reveal global terlambat
-          info.querySelectorAll('.signature-name,.signature-role,.signature-actions')
-            .forEach(n=> n.classList.add('visible'));
           startDrawing();
         }
       });
@@ -295,18 +291,51 @@ document.getElementById('motionToggle')?.addEventListener('click', function(){
       if(progress < 1){
         rafId = requestAnimationFrame(frame);
       }else{
-        // Keep final state + cap stempel terverifikasi
+        // Keep final state, lalu tulis nama seperti pulpen
         draw(1);
-        setTimeout(()=> document.getElementById('sigStamp')?.classList.add('stamped'), 350);
+        writeName();
+        setTimeout(()=> document.getElementById('sigStamp')?.classList.add('stamped'), 2300);
       }
     }
     rafId = requestAnimationFrame(frame);
   }
 
-  // Replay: tulis ulang tanda tangan dari awal
+  // Nama digambar bergaris (stroke) seperti tanda tangan, lalu tinta mengisi
+  let fallbackTimer = null;
+  function writeName(){
+    if(fallbackTimer){ clearTimeout(fallbackTimer); fallbackTimer = null; }
+    const wrap = document.getElementById('sigNameWrap');
+    const t = document.querySelector('.sig-name-text');
+    if(wrap) wrap.classList.add('visible');
+    if(t){
+      let len = 700;
+      try{ len = t.getComputedTextLength() * 1.1; }catch(e){}
+      t.style.setProperty('--len', len.toFixed(0));
+      void t.getBoundingClientRect(); // reflow agar transisi berjalan
+      t.classList.add('drawn');
+    }
+    setTimeout(()=>{
+      document.getElementById('sigRole')?.classList.add('visible');
+      document.getElementById('sigActions')?.classList.add('visible');
+    }, 1600);
+  }
+
+  // Pengaman: paksa semua tampil bila observer global terlewat
+  fallbackTimer = setTimeout(()=>{
+    if(!animated) return;
+    document.getElementById('sigNameWrap')?.classList.add('visible');
+    document.querySelector('.sig-name-text')?.classList.add('drawn');
+    document.getElementById('sigRole')?.classList.add('visible');
+    document.getElementById('sigActions')?.classList.add('visible');
+  }, 9000);
+
+  // Replay: tulis ulang tanda tangan + nama dari awal
   document.getElementById('replaySignature')?.addEventListener('click', ()=>{
     if(rafId) cancelAnimationFrame(rafId);
     document.getElementById('sigStamp')?.classList.remove('stamped');
+    const t = document.querySelector('.sig-name-text');
+    if(t){ t.style.transition = 'none'; t.classList.remove('drawn'); void t.getBoundingClientRect(); t.style.transition = ''; }
+    ['sigRole','sigActions'].forEach(id=> document.getElementById(id)?.classList.remove('visible'));
     progress = 0;
     draw(0);
     setTimeout(startDrawing, 250);
@@ -318,8 +347,39 @@ document.getElementById('motionToggle')?.addEventListener('click', function(){
 // 3. Mobile menu
 const burger = document.getElementById('burger');
 const mobileMenu = document.getElementById('mobileMenu');
-burger.addEventListener('click', ()=> mobileMenu.classList.toggle('open'));
+burger.addEventListener('click', ()=>{
+  mobileMenu.classList.toggle('open');
+  document.getElementById('navbar')?.classList.remove('nav-hidden');
+});
 mobileMenu.querySelectorAll('a').forEach(a=> a.addEventListener('click', ()=> mobileMenu.classList.remove('open')));
+
+// 3b. Scroll FX — progress bar + navbar auto-hide + content parallax antar-slide
+(function scrollFX(){
+  const bar = document.getElementById('scrollProgress');
+  const nav = document.getElementById('navbar');
+  const menu = document.getElementById('mobileMenu');
+  const secs = [...document.querySelectorAll('main section')].filter(s=> s.id !== 'hero');
+  let lastY = window.scrollY;
+  window.addEventListener('scroll', ()=>{
+    const y = window.scrollY;
+    const vh = window.innerHeight;
+    const max = document.documentElement.scrollHeight - vh;
+    if(bar) bar.style.width = (max > 0 ? (y / max * 100).toFixed(2) : 0) + '%';
+    // Navbar sembunyi saat scroll ke bawah, muncul saat ke atas
+    if(nav && menu && !menu.classList.contains('open')){
+      if(y > 320 && y > lastY + 4) nav.classList.add('nav-hidden');
+      else if(y < lastY - 4 || y <= 320) nav.classList.remove('nav-hidden');
+    }
+    lastY = y;
+    // Parallax isi konten — tiap slide melayang berlapis (maks ±26px)
+    secs.forEach(sec=>{
+      const r = sec.getBoundingClientRect();
+      if(r.bottom < -200 || r.top > vh + 200) return;
+      const off = (r.top + r.height / 2 - vh / 2) * -0.035;
+      sec.style.setProperty('--px', Math.max(-26, Math.min(26, off)).toFixed(1) + 'px');
+    });
+  }, {passive:true});
+})();
 
 // 4. Reveal on scroll — with stagger for cinematic feel
 const io = new IntersectionObserver((entries)=>{
