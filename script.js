@@ -623,12 +623,6 @@ document.querySelectorAll('.chip').forEach(btn=>{
   });
 });
 
-// 7. Film modal
-const filmModal = document.getElementById('filmModal');
-document.getElementById('playBtn').addEventListener('click', ()=> filmModal.classList.add('open'));
-document.getElementById('closeFilm').addEventListener('click', ()=> filmModal.classList.remove('open'));
-filmModal.addEventListener('click', e=>{ if(e.target === filmModal) filmModal.classList.remove('open'); });
-
 // 8. Custom cursor
 (function cursor(){
   const c = document.getElementById('cursor');
@@ -726,4 +720,3 @@ window.addEventListener('scroll', ()=>{
   navAs.forEach(a=> a.classList.toggle('active', a.getAttribute('href') === '#' + current));
 }, {passive:true});
 
-console.log('%cRMA Portfolio — native HTML/CSS/JS 🌿', 'color:#597928;font-weight:bold');

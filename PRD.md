@@ -143,7 +143,7 @@ Lapisan dari belakang ke depan: `img#heroImg` → `video.hero-video` → `.hero-
 - Parallax: scroll (`translateY(scrollY*.3)` pada `#heroBg`) + mouse (`data-depth` .02/.04/.06, lerp .05, teks berlawanan −18/−14px, hanya `hover:hover`).
 - Kontrol: `#motionToggle` (❚❚/▶ Latar) — toggle `body.paused` (freeze semua animasi CSS) + pause/play video.
 - Aksesibilitas gerak: `prefers-reduced-motion:reduce` mematikan semua animasi hero.
-- Teks: top-label, eyebrow “Halo, saya”, H1 dua baris (RASENDRIYA + italic Muhammad Adisanto), sub, CTA (Lihat Karya + Tonton Film → modal placeholder), bottom (koordinat Jagakarsa | scroll-hint | MAN 13 + motion toggle), `#filmModal`.
+- Teks: top-label, eyebrow “Halo, saya”, H1 dua baris (RASENDRIYA + italic Muhammad Adisanto), sub, CTA (Lihat Karya + Hubungi Saya), bottom (koordinat Jagakarsa | scroll-hint | MAN 13 + motion toggle).
 
 ### F3 — Navigasi
 `#navbar` fixed: brand `RMA.` + 5 link (Tentang/Profil/Pendidikan/Karya/Perjalanan) + CTA Hubungi Saya + `#burger`. `.scrolled` (>60px) → latar cream blur + teks brown. Active-link跟踪 via scroll. `#mobileMenu` fullscreen brown-dark.

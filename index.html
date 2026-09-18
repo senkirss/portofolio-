@@ -4,7 +4,15 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Rasendriya Muhammad Adisanto — Portofolio</title>
-  <meta name="description" content="Portofolio Rasendriya Muhammad Adisanto, Kelas 1CC5. Terinspirasi oleh White Desert — luxury, tenang, dan eksploratif." />
+  <meta name="description" content="Portofolio Rasendriya Muhammad Adisanto, mahasiswa CCIT-FTUI kelas 1CC5. Web native HTML, CSS, JS — profil, karya, dan perjalanan MAN 13 → CCIT-FTUI." />
+  <meta name="theme-color" content="#3E200A" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Rasendriya Muhammad Adisanto — Portofolio" />
+  <meta property="og:description" content="Mahasiswa CCIT-FTUI kelas 1CC5. Web native HTML/CSS/JS: profil, karya, perjalanan." />
+  <meta property="og:url" content="https://senkirss.github.io/portofolio-/" />
+  <meta property="og:image" content="https://senkirss.github.io/portofolio-/assets/rasen.jpeg" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%236E3511'/%3E%3Ctext x='32' y='45' font-family='Georgia,serif' font-size='38' fill='%23FCECD8' text-anchor='middle'%3ER%3C/text%3E%3Ccircle cx='47' cy='47' r='5' fill='%2391AC67'/%3E%3C/svg%3E" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,300;1,9..144,400&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -13,6 +21,7 @@
 <body>
 
   <div id="scrollProgress"></div>
+  <a class="skip-link" href="#tentang">Lewati ke konten utama</a>
 
   <!-- Preloader -->
   <div id="preloader">
@@ -57,7 +66,7 @@
     <section id="hero">
       <div class="hero-bg" id="heroBg">
         <!-- Lapisan foto perkotaan (fallback + Ken Burns — semua efek tetap) -->
-        <img src="https://images.unsplash.com/photo-1449824913935-59a10b8d2000?q=80&w=2000&auto=format&fit=crop" alt="Perkotaan Jakarta — skyline kota" id="heroImg" class="hero-layer" data-depth="0.02" />
+        <img src="https://images.unsplash.com/photo-1449824913935-59a10b8d2000?q=80&w=2000&auto=format&fit=crop" alt="Langit kota Jakarta saat senja" id="heroImg" class="hero-layer" data-depth="0.02" fetchpriority="high" />
         <!-- Lapisan video perkotaan (bergerak realistis — traffic & skyline) -->
         <video class="hero-layer hero-video" data-depth="0.04" autoplay muted loop playsinline preload="auto"
           poster="https://images.unsplash.com/photo-1449824913935-59a10b8d2000?q=80&w=2000&auto=format&fit=crop">
@@ -91,9 +100,7 @@
         <p class="hero-sub reveal">Mahasiswa yang tenang, eksploratif, dan berakar —<br />terinspirasi oleh alam, tumbuh lewat proses.</p>
         <div class="hero-cta reveal">
           <a href="#karya" class="btn btn-light">Lihat Karya</a>
-          <button class="btn-play" id="playBtn">
-            <span class="play-circle">▶</span> Tonton Film
-          </button>
+          <a href="#kontak" class="btn btn-outline">Hubungi Saya</a>
         </div>
       </div>
 
@@ -106,16 +113,6 @@
         </div>
       </div>
 
-      <!-- Video modal -->
-      <div id="filmModal">
-        <div class="film-box">
-          <button id="closeFilm">✕</button>
-          <div class="film-placeholder">
-            <h3>Showreel — Segera Hadir</h3>
-            <p>Ganti dengan link YouTube / video perkenalan kamu di sini.</p>
-          </div>
-        </div>
-      </div>
     </section>
 
     <!-- Marquee -->
@@ -146,8 +143,8 @@
         </div>
       </div>
       <div class="container img-duo">
-        <img class="reveal-img" src="https://images.unsplash.com/photo-1441974231531-c6227db76b6e?q=80&w=1200&auto=format&fit=crop" alt="Hutan" />
-        <img class="reveal-img tall" src="https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?q=80&w=1200&auto=format&fit=crop" alt="Bukit berkabut" />
+        <img class="reveal-img" src="https://images.unsplash.com/photo-1441974231531-c6227db76b6e?q=80&w=1200&auto=format&fit=crop" alt="Jalan setapak di hutan pinus" loading="lazy" decoding="async" />
+        <img class="reveal-img tall" src="https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?q=80&w=1200&auto=format&fit=crop" alt="Bukit berkabut saat pagi hari" loading="lazy" decoding="async" />
       </div>
     </section>
 
@@ -165,7 +162,7 @@
         <div class="reel-viewport" id="reelViewport">
           <div class="h-scroll" id="hScroll">
             <article class="trip-card reveal" data-index="0">
-              <div class="card-media"><img src="assets/rasen.jpeg" alt="Nama" /><span class="card-num">01</span></div>
+              <div class="card-media"><img src="assets/rasen.jpeg" alt="Foto potret Rasendriya Muhammad Adisanto" loading="lazy" decoding="async" /><span class="card-num">01</span></div>
               <div class="trip-body">
                 <p class="trip-tag">Identitas</p>
                 <h3>Nama Lengkap</h3>
@@ -174,7 +171,7 @@
               </div>
             </article>
             <article class="trip-card reveal" data-index="1">
-              <div class="card-media"><img src="assets/open%20ccit.jpeg" alt="Kelas" /><span class="card-num">02</span></div>
+              <div class="card-media"><img src="assets/open%20ccit.jpeg" alt="Suasana kelas komputer CCIT" loading="lazy" decoding="async" /><span class="card-num">02</span></div>
               <div class="trip-body">
                 <p class="trip-tag">Akademik</p>
                 <h3>Kelas 1CC5</h3>
@@ -183,7 +180,7 @@
               </div>
             </article>
             <article class="trip-card reveal" data-index="2">
-              <div class="card-media"><img src="https://images.unsplash.com/photo-1564013799919-ab600027ffc6?q=80&w=800&auto=format&fit=crop" alt="Alamat" /><span class="card-num">03</span></div>
+              <div class="card-media"><img src="https://images.unsplash.com/photo-1564013799919-ab600027ffc6?q=80&w=800&auto=format&fit=crop" alt="Perumahan modern di Jagakarsa" loading="lazy" decoding="async" /><span class="card-num">03</span></div>
               <div class="trip-body">
                 <p class="trip-tag">Domisili</p>
                 <h3>Casamora Jagakarsa</h3>
@@ -192,7 +189,7 @@
               </div>
             </article>
             <article class="trip-card reveal" data-index="3">
-              <div class="card-media"><img src="assets/MAN%2013%20JAKARTA.jpg" alt="Pendidikan" /><span class="card-num">04</span></div>
+              <div class="card-media"><img src="assets/MAN%2013%20JAKARTA.jpg" alt="Gedung MAN 13 Jakarta Selatan" loading="lazy" decoding="async" /><span class="card-num">04</span></div>
               <div class="trip-body">
                 <p class="trip-tag">Pendidikan Terakhir</p>
                 <h3>MAN 13 Jakarta Selatan</h3>
@@ -269,7 +266,7 @@
                 </div>
               </article>
               <article class="trip-card reveal" data-index="1">
-                <div class="card-media"><img src="assets/image.png" alt="Kelas 1CC5" /><span class="card-num">02</span></div>
+                <div class="card-media"><img src="assets/image.png" alt="Kegiatan kelas 1CC5" loading="lazy" decoding="async" /><span class="card-num">02</span></div>
                 <div class="trip-body">
                   <p class="trip-tag">Basecamp Aktif</p>
                   <h3>Kelas 1CC5</h3>
@@ -278,7 +275,7 @@
                 </div>
               </article>
               <article class="trip-card reveal" data-index="2">
-                <div class="card-media"><img src="https://images.unsplash.com/photo-1519389950473-47ba0277781c?q=80&w=900&auto=format&fit=crop" alt="Skill" /><span class="card-num">03</span></div>
+                <div class="card-media"><img src="https://images.unsplash.com/photo-1519389950473-47ba0277781c?q=80&w=900&auto=format&fit=crop" alt="Tim berdiskusi di depan komputer" loading="lazy" decoding="async" /><span class="card-num">03</span></div>
                 <div class="trip-body">
                   <p class="trip-tag">Skill Set</p>
                   <h3>HTML • CSS • JS</h3>
@@ -327,29 +324,32 @@
         </div>
         <div class="work-grid" id="workGrid">
           <article class="work-card reveal" data-cat="web">
-            <img src="https://images.unsplash.com/photo-1467232004584-a241de8bcf5d?q=80&w=900&auto=format&fit=crop" alt="Web 1" />
-            <div class="work-body"><h3>Landing Page Alam</h3><p>HTML • CSS • JS — layout fullscreen ala White Desert.</p></div>
+            <img src="https://images.unsplash.com/photo-1467232004584-a241de8bcf5d?q=80&w=900&auto=format&fit=crop" alt="Pratinjau landing page bertema alam" loading="lazy" decoding="async" />
+            <div class="work-body"><h3>Landing Page Alam</h3><p>Latihan hero fullscreen + parallax sinematik ala White Desert.</p><div class="tech-badges"><span>HTML</span><span>CSS</span><span>JS</span></div></div>
           </article>
           <article class="work-card reveal" data-cat="tugas">
-            <img src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?q=80&w=900&auto=format&fit=crop" alt="Tugas" />
-            <div class="work-body"><h3>Tugas Kelas 1CC5</h3><p>Dokumentasi & presentasi — rapi dan terstruktur.</p></div>
+            <img src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?q=80&w=900&auto=format&fit=crop" alt="Dokumen dan laptop tugas kuliah" loading="lazy" decoding="async" />
+            <div class="work-body"><h3>Tugas Kelas 1CC5</h3><p>Dokumentasi & presentasi tugas — rapi dan terstruktur.</p><div class="tech-badges"><span>Dokumentasi</span><span>Presentasi</span></div></div>
           </article>
           <article class="work-card reveal" data-cat="desain">
-            <img src="https://images.unsplash.com/photo-1561070791-2526d30994b5?q=80&w=900&auto=format&fit=crop" alt="Desain" />
-            <div class="work-body"><h3>Poster & Layout</h3><p>Eksplorasi tipografi serif + palet earthy.</p></div>
+            <img src="https://images.unsplash.com/photo-1561070791-2526d30994b5?q=80&w=900&auto=format&fit=crop" alt="Contoh eksplorasi desain grafis dan tipografi" loading="lazy" decoding="async" />
+            <div class="work-body"><h3>Poster & Layout</h3><p>Eksplorasi tipografi serif + palet warna earthy.</p><div class="tech-badges"><span>Tipografi</span><span>Layout</span></div></div>
           </article>
           <article class="work-card reveal" data-cat="web">
-            <img src="https://images.unsplash.com/photo-1547658719-da2b51169166?q=80&w=900&auto=format&fit=crop" alt="Web 2" />
-            <div class="work-body"><h3>Portofolio Native</h3><p>Website ini — 100% HTML, CSS, JS tanpa framework.</p></div>
+            <img src="https://images.unsplash.com/photo-1547658719-da2b51169166?q=80&w=900&auto=format&fit=crop" alt="Pratinjau website portofolio ini" loading="lazy" decoding="async" />
+            <div class="work-body"><h3>Portofolio Native</h3><p>Website ini — 100% HTML, CSS, JS tanpa framework. <a href="https://github.com/senkirss/portofolio-" target="_blank" rel="noopener">Lihat source →</a></p><div class="tech-badges"><span>HTML</span><span>CSS</span><span>JS</span><span>Git</span></div></div>
           </article>
           <article class="work-card reveal" data-cat="desain">
-            <img src="https://images.unsplash.com/photo-1493421419110-74f4e85ba126?q=80&w=900&auto=format&fit=crop" alt="Foto" />
-            <div class="work-body"><h3>Fotografi Jagakarsa</h3><p>Potret tenang sekitar Casamora.</p></div>
+            <img src="https://images.unsplash.com/photo-1493421419110-74f4e85ba126?q=80&w=900&auto=format&fit=crop" alt="Kamera dan hasil fotografi" loading="lazy" decoding="async" />
+            <div class="work-body"><h3>Fotografi Jagakarsa</h3><p>Potret suasana tenang sekitar Casamora.</p><div class="tech-badges"><span>Fotografi</span></div></div>
           </article>
           <article class="work-card reveal" data-cat="tugas">
-            <img src="https://images.unsplash.com/photo-1434030216411-0b793f4b4173?q=80&w=900&auto=format&fit=crop" alt="Catatan" />
-            <div class="work-body"><h3>Catatan Belajar</h3><p>Rangkuman materi komputasi dasar.</p></div>
+            <img src="https://images.unsplash.com/photo-1434030216411-0b793f4b4173?q=80&w=900&auto=format&fit=crop" alt="Catatan tangan materi belajar" loading="lazy" decoding="async" />
+            <div class="work-body"><h3>Catatan Belajar</h3><p>Rangkuman materi komputasi dasar kelas 1CC5.</p><div class="tech-badges"><span>Komputasi Dasar</span></div></div>
           </article>
+        </div>
+        <div class="work-more reveal">
+          <a class="btn" href="https://github.com/senkirss" target="_blank" rel="noopener">Lihat GitHub saya →</a>
         </div>
       </div>
     </section>
