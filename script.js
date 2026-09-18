@@ -271,6 +271,9 @@ document.getElementById('motionToggle')?.addEventListener('click', function(){
           animated = true;
           observer.disconnect();
           info.classList.add('reveal');
+          // Pastikan teks selalu tampil walau reveal global terlambat
+          info.querySelectorAll('.signature-name,.signature-role,.signature-actions')
+            .forEach(n=> n.classList.add('visible'));
           startDrawing();
         }
       });
@@ -292,12 +295,22 @@ document.getElementById('motionToggle')?.addEventListener('click', function(){
       if(progress < 1){
         rafId = requestAnimationFrame(frame);
       }else{
-        // Keep final state
+        // Keep final state + cap stempel terverifikasi
         draw(1);
+        setTimeout(()=> document.getElementById('sigStamp')?.classList.add('stamped'), 350);
       }
     }
     rafId = requestAnimationFrame(frame);
   }
+
+  // Replay: tulis ulang tanda tangan dari awal
+  document.getElementById('replaySignature')?.addEventListener('click', ()=>{
+    if(rafId) cancelAnimationFrame(rafId);
+    document.getElementById('sigStamp')?.classList.remove('stamped');
+    progress = 0;
+    draw(0);
+    setTimeout(startDrawing, 250);
+  });
 
   animate();
 })();
@@ -344,7 +357,7 @@ const sectionIO = new IntersectionObserver((entries)=>{
     }
   });
 },{threshold:0.08});
-document.querySelectorAll('section[id], .signature-section').forEach(s=> sectionIO.observe(s));
+document.querySelectorAll('main section').forEach(s=> sectionIO.observe(s));
 
 function animateCount(el){
   el.dataset.done = 1;
