@@ -163,6 +163,7 @@ document.getElementById('motionToggle')?.addEventListener('click', function(){
   const ctx = canvas.getContext('2d');
   let w=0, h=0, dpr=window.devicePixelRatio||1;
   let animated=false, progress=0, rafId=null;
+  let samples = [];
 
   function resize(){
     const rect = canvas.parentElement.getBoundingClientRect();
@@ -173,167 +174,89 @@ document.getElementById('motionToggle')?.addEventListener('click', function(){
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     ctx.lineCap = 'round';
     ctx.lineJoin = 'round';
+    samples = signatureSamples();
     if(progress >= 1) draw(1);
+    else if(animated) draw(progress);
   }
   window.addEventListener('resize', resize);
   resize();
 
-  // Build signature path: R + 5 waves + upward tail
-  function buildPath(){
-    const path = new Path2D();
+  // Build smooth pen-like points: cursive R + 5 waves + upward tail,
+  // smoothed with Catmull-Rom so no sharp corners (like a real pen)
+  function signatureSamples(){
     const cw = canvas.width / dpr;
     const ch = canvas.height / dpr;
-    const startX = cw * 0.12;
-    const baseline = ch * 0.68;
-    const waveAmp = 14;
-    const waveW = 32;
-    const Rheight = ch * 0.35;
+    const cx = cw / 2, base = ch * 0.68;
+    const s = Math.min(cw / 470, ch / 200);
+    const raw = [];
+    const add = (x, y) => raw.push({x: cx + x * s, y: base + y * s});
 
-    // Letter R
-    // Vertical stem
-    path.moveTo(startX, baseline);
-    path.lineTo(startX, baseline - Rheight);
-    // Top curve of R
-    path.bezierCurveTo(
-      startX, baseline - Rheight - 10,
-      startX + 22, baseline - Rheight - 10,
-      startX + 22, baseline - Rheight * 0.55
-    );
-    // Middle bar
-    path.lineTo(startX + 22, baseline - Rheight * 0.55);
-    path.bezierCurveTo(
-      startX + 22, baseline - Rheight * 0.55 - 6,
-      startX + 14, baseline - Rheight * 0.55 - 12,
-      startX + 6, baseline - Rheight * 0.55 - 10
-    );
-    // Leg of R
-    path.moveTo(startX, baseline - Rheight * 0.55);
-    path.lineTo(startX + 26, baseline);
-    // End of R at right side
-    let x = startX + 30;
+    // --- Cursive R in one flowing motion ---
+    add(-152, 10); add(-150, -18); add(-147, -48); add(-142, -70);
+    add(-132, -82); add(-116, -86); add(-101, -81); add(-94, -68);
+    add(-97, -55); add(-108, -48); add(-122, -45); add(-130, -43);
+    add(-118, -32); add(-104, -16); add(-92, 0); add(-83, 10);
 
-    // 5 small waves
-    for(let i=0;i<5;i++){
-      const waveStartY = baseline - 6 + (i%2)*4;
-      path.moveTo(x, waveStartY);
-      path.bezierCurveTo(
-        x + waveW*0.25, waveStartY - waveAmp,
-        x + waveW*0.75, waveStartY + waveAmp,
-        x + waveW, waveStartY
-      );
-      x += waveW;
+    // --- connector into waves ---
+    add(-72, 12); add(-62, 9);
+
+    // --- 5 smooth sine waves ---
+    const waves = 5, waveW = 27, amp = 10, x0 = -62, per = 12;
+    const total = waves * per;
+    for(let k = 1; k <= total; k++){
+      const t = k / per; // 0..5 in wave units
+      add(x0 + t * waveW, 5 + amp * Math.sin(t * Math.PI * 2 - Math.PI / 2 + 0.5));
     }
 
-    // Upward tail from last wave end
-    path.moveTo(x, baseline - 6);
-    path.bezierCurveTo(
-      x + 15, baseline - 6,
-      x + 25, baseline - 28,
-      x + 35, baseline - 42
-    );
+    // --- upward tail flourish ---
+    const xEnd = x0 + waves * waveW;
+    add(xEnd + 8, -2); add(xEnd + 18, -14);
+    add(xEnd + 27, -30); add(xEnd + 34, -48); add(xEnd + 38, -64);
 
-    return path;
-  }
-
-  const fullPath = buildPath();
-  const totalLen = getPathLength(fullPath);
-
-  // Helper to get path length
-  function getPathLength(path){
-    // Approximate by sampling
-    let len = 0;
-    const steps = 200;
-    let lastX=0, lastY=0, first=true;
-    for(let i=0;i<=steps;i++){
-      const t = i/steps;
-      const pt = getPointOnPath(path, t);
-      if(first){ lastX=pt.x; lastY=pt.y; first=false; continue; }
-      len += Math.hypot(pt.x-lastX, pt.y-lastY);
-      lastX=pt.x; lastY=pt.y;
-    }
-    return len;
-  }
-
-  function getPointOnPath(path, t){
-    // Use SVGPathSegList approximation via canvas
-    // Fallback: return rough point
-    const cw = canvas.width / dpr;
-    const ch = canvas.height / dpr;
-    const startX = cw * 0.12;
-    const baseline = ch * 0.68;
-    const Rheight = ch * 0.35;
-    const waveAmp = 14;
-    const waveW = 32;
-    const totalSegments = 1 + 5 + 1; // R + 5 waves + tail
-    const seg = Math.floor(t * totalSegments);
-    const localT = (t * totalSegments) - seg;
-    const xBase = startX + 30 + seg * waveW;
-    
-    if(seg === 0){
-      // R shape - simplified
-      if(localT < 0.33){
-        return {x: startX, y: baseline - localT * 3 * Rheight};
-      }else if(localT < 0.66){
-        const lt = (localT-0.33)/0.33;
-        return {x: startX + lt * 22, y: baseline - Rheight};
-      }else{
-        const lt = (localT-0.66)/0.34;
-        return {x: startX + 22 - lt * 16, y: baseline - Rheight + lt * (Rheight*0.45)};
+    // Catmull-Rom -> dense smooth samples
+    const P = [raw[0], ...raw, raw[raw.length - 1]];
+    const out = [];
+    const perSeg = 14;
+    for(let i = 1; i < P.length - 2; i++){
+      const p0 = P[i-1], p1 = P[i], p2 = P[i+1], p3 = P[i+2];
+      for(let j = 0; j < perSeg; j++){
+        const t = j / perSeg, t2 = t * t, t3 = t2 * t;
+        out.push({
+          x: 0.5 * ((2*p1.x) + (-p0.x+p2.x)*t + (2*p0.x-5*p1.x+4*p2.x-p3.x)*t2 + (-p0.x+3*p1.x-3*p2.x+p3.x)*t3),
+          y: 0.5 * ((2*p1.y) + (-p0.y+p2.y)*t + (2*p0.y-5*p1.y+4*p2.y-p3.y)*t2 + (-p0.y+3*p1.y-3*p2.y+p3.y)*t3)
+        });
       }
-    }else if(seg <= 5){
-      // Waves
-      const waveX = startX + 30 + (seg-1)*waveW;
-      return {
-        x: waveX + localT * waveW,
-        y: baseline - 6 + waveAmp * Math.sin(localT * Math.PI * 2)
-      };
-    }else{
-      // Tail upward
-      const tailX = startX + 30 + 5*waveW;
-      return {
-        x: tailX + localT * 35,
-        y: baseline - 6 - localT * 36
-      };
     }
+    out.push({...raw[raw.length - 1]});
+    return out;
   }
+
+  samples = signatureSamples();
 
   function draw(prog){
     const cw = canvas.width / dpr;
     const ch = canvas.height / dpr;
-    ctx.clearRect(0,0,cw,ch);
+    ctx.clearRect(0, 0, cw, ch);
     ctx.strokeStyle = '#6E3511';
-    ctx.lineWidth = 2.5;
+    ctx.lineWidth = 2.6;
     ctx.globalAlpha = 1;
 
-    // Draw path progressively
-    const steps = 300;
-    const drawLen = totalLen * prog;
-    let accum = 0;
-    let lastPt = null;
+    const n = Math.max(1, Math.floor(prog * (samples.length - 1)));
     ctx.beginPath();
-    for(let i=0;i<=steps;i++){
-      const t = i/steps;
-      const pt = getPointOnPath(fullPath, t);
-      const segLen = lastPt ? Math.hypot(pt.x-lastPt.x, pt.y-lastPt.y) : 0;
-      accum += segLen;
-      if(accum > drawLen) break;
-      if(i===0) ctx.moveTo(pt.x, pt.y);
-      else ctx.lineTo(pt.x, pt.y);
-      lastPt = pt;
-    }
+    ctx.moveTo(samples[0].x, samples[0].y);
+    for(let i = 1; i <= n; i++) ctx.lineTo(samples[i].x, samples[i].y);
     ctx.stroke();
 
-    // Draw moving dot at tip
+    // Pen tip dot while drawing
     if(prog > 0 && prog < 1){
-      const tipT = Math.min(1, prog + 0.001);
-      const tipPt = getPointOnPath(fullPath, tipT);
+      const tip = samples[n];
       ctx.beginPath();
-      ctx.arc(tipPt.x, tipPt.y, 4, 0, Math.PI*2);
+      ctx.arc(tip.x, tip.y, 4, 0, Math.PI * 2);
       ctx.fillStyle = '#91AC67';
       ctx.fill();
       ctx.globalAlpha = 0.3;
       ctx.beginPath();
-      ctx.arc(tipPt.x, tipPt.y, 10, 0, Math.PI*2);
+      ctx.arc(tip.x, tip.y, 10, 0, Math.PI * 2);
       ctx.fillStyle = '#91AC67';
       ctx.fill();
       ctx.globalAlpha = 1;
