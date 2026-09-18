@@ -19,7 +19,7 @@
 // 2. Navbar scroll + parallax hero + section atmospheres
 const navbar = document.getElementById('navbar');
 const heroBg = document.getElementById('heroBg');
-const sectionAtmos = document.querySelectorAll('.section-atmos');
+const sectionAtmos = document.querySelectorAll('.section-atmos, .signature-atmos');
 window.addEventListener('scroll', ()=>{
   navbar.classList.toggle('scrolled', window.scrollY > 60);
   if(heroBg && window.scrollY < window.innerHeight){
@@ -81,7 +81,7 @@ window.addEventListener('scroll', ()=>{
 // 2c2. Subtle mouse parallax for section atmospheres (desktop only, very gentle)
 (function sectionMouseParallax(){
   if(!window.matchMedia('(hover:hover)').matches) return;
-  const atmos = document.querySelectorAll('.section-atmos');
+  const atmos = document.querySelectorAll('.section-atmos, .signature-atmos');
   if(!atmos.length) return;
   let tx=0, ty=0, cx=0, cy=0;
   document.addEventListener('mousemove', e=>{
@@ -170,9 +170,10 @@ document.getElementById('motionToggle')?.addEventListener('click', function(){
     h = canvas.height = Math.floor(rect.height * dpr);
     canvas.style.width = rect.width + 'px';
     canvas.style.height = rect.height + 'px';
-    ctx.scale(dpr, dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     ctx.lineCap = 'round';
     ctx.lineJoin = 'round';
+    if(progress >= 1) draw(1);
   }
   window.addEventListener('resize', resize);
   resize();
@@ -420,7 +421,7 @@ const sectionIO = new IntersectionObserver((entries)=>{
     }
   });
 },{threshold:0.08});
-document.querySelectorAll('section[id]').forEach(s=> sectionIO.observe(s));
+document.querySelectorAll('section[id], .signature-section').forEach(s=> sectionIO.observe(s));
 
 function animateCount(el){
   el.dataset.done = 1;
