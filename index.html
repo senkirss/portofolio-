@@ -15,7 +15,7 @@
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%236E3511'/%3E%3Ctext x='32' y='45' font-family='Georgia,serif' font-size='38' fill='%23FCECD8' text-anchor='middle'%3ER%3C/text%3E%3Ccircle cx='47' cy='47' r='5' fill='%2391AC67'/%3E%3C/svg%3E" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,300;1,9..144,400&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,300;1,9..144,400&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
@@ -62,59 +62,48 @@
   </div>
 
   <main>
-    <!-- HERO ala White Desert -->
+    <!-- HERO ala studiors — dark studio, judul raksasa, list karya -->
     <section id="hero">
       <div class="hero-bg" id="heroBg">
-        <!-- Jakarta malam: Sudirman Business District (fallback + Ken Burns) -->
-        <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Jakarta%20skyline%20at%20night%20--%20Business%20District%20area%20at%20Jalan%20Jenderal%20Sudirman%2C%20Central%20Jakarta%2C%20as%20seen%20from%20Kuningan%20District%2C%20South%20Jakarta%2C%20Indonesia.jpg?width=1920" alt="Gedung-gedung menyala di kawasan bisnis Sudirman Jakarta pada malam hari" id="heroImg" class="hero-layer" data-depth="0.02" fetchpriority="high" />
-        <div class="hero-overlay"></div>
-        <!-- Bulan malam kota -->
-        <div class="moon" data-depth="0.05"></div>
-        <!-- Awan terus berjalan di atas langit -->
-        <div class="clouds clouds-a"></div>
-        <div class="clouds clouds-b"></div>
-        <!-- Lalu lintas + jendela gedung yang menyala (canvas) -->
-        <canvas id="cityFx"></canvas>
-        <!-- Kerlap lampu kota -->
-        <div class="city-lights"></div>
-        <div class="sun-glow" data-depth="0.06"></div>
-        <!-- Kabut berlapis yang bergerak -->
-        <div class="mist mist-a"></div>
-        <div class="mist mist-b"></div>
-        <div class="mist mist-c"></div>
-        <!-- Partikel cahaya melayang -->
+        <div class="giant-r" data-depth="0.04" aria-hidden="true">R</div>
+        <div class="studio-glow"></div>
         <canvas id="particles"></canvas>
         <div class="hero-grain"></div>
         <div class="hero-vignette"></div>
       </div>
 
-      <div class="hero-top-label reveal">
-        <span class="line"></span>
-        <p>Portofolio — Kelas 1CC5 — Jakarta Selatan</p>
-        <span class="line"></span>
+      <div class="studio-grid">
+        <div class="studio-left">
+          <p class="studio-kicker reveal">Portofolio — Kelas 1CC5 — Jakarta Selatan</p>
+          <h1 class="studio-title">
+            <span class="st-sans reveal">RASENDRIYA</span>
+            <span class="st-serif reveal">Kreatif</span>
+          </h1>
+          <div class="hero-cta reveal">
+            <a href="#karya" class="btn btn-light">Lihat Karya</a>
+            <a href="#kontak" class="btn btn-outline">Hubungi Saya</a>
+          </div>
+        </div>
+        <div class="studio-right">
+          <p class="studio-desc reveal">Rasendriya adalah mahasiswa CCIT-FTUI kelas 1CC5 di Jakarta Selatan. Saya merancang dan membangun website native — rapi hingga ke interaksinya.</p>
+          <ul class="studio-list">
+            <li class="reveal"><a href="#karya"><span class="num">01</span><span class="name">Portofolio Native</span><span class="arrow">→</span></a></li>
+            <li class="reveal"><a href="#karya"><span class="num">02</span><span class="name">Landing Page Alam</span><span class="arrow">→</span></a></li>
+            <li class="reveal"><a href="#data-diri"><span class="num">03</span><span class="name">Profil Singkat</span><span class="arrow">→</span></a></li>
+          </ul>
+        </div>
       </div>
 
-      <div class="hero-center">
-        <p class="hero-eyebrow reveal">Halo, saya</p>
-        <h1 class="hero-title">
-          <span class="ht-line reveal">RASENDRIYA</span>
-          <span class="ht-line italic reveal">Muhammad Adisanto</span>
-        </h1>
-        <p class="hero-sub reveal">Mahasiswa yang tenang, eksploratif, dan berakar —<br />terinspirasi oleh alam, tumbuh lewat proses.</p>
-        <div class="hero-cta reveal">
-          <a href="#karya" class="btn btn-light">Lihat Karya</a>
-          <a href="#kontak" class="btn btn-outline">Hubungi Saya</a>
+      <div class="wordmarquee" aria-hidden="true">
+        <div class="wordmarquee-track">
+          <span>rasendriya&ensp;—&ensp;</span><span>rasendriya&ensp;—&ensp;</span><span>rasendriya&ensp;—&ensp;</span><span>rasendriya&ensp;—&ensp;</span><span>rasendriya&ensp;—&ensp;</span><span>rasendriya&ensp;—&ensp;</span>
         </div>
       </div>
 
       <div class="hero-bottom">
         <div class="hero-coord">6°18' S — 106°49' E<br /><strong>Jagakarsa, Jakarta</strong></div>
         <div class="scroll-hint"><span></span>Scroll</div>
-        <div class="hero-side">
-          <div class="hero-coord right">MAN 13<br /><strong>Jakarta Selatan</strong></div>
-          <div class="sky-phase">🌙 <span id="skyPhase">Jakarta --:--</span></div>
-          <button id="motionToggle" title="Jeda / putar animasi latar">❚❚ Latar</button>
-        </div>
+        <div class="hero-coord right">MAN 13<br /><strong>Jakarta Selatan</strong></div>
       </div>
 
     </section>
@@ -449,7 +438,7 @@
 
   <footer>
     <div class="container foot-grid">
-      <div><h3>RMA<span>.</span></h3><p>Portofolio native — HTML, CSS, JS.<br />Terinspirasi oleh white-desert.com</p><p class="foot-credit">Foto hero Jakarta: Wikimedia Commons (CC BY-SA 4.0)</p></div>
+      <div><h3>RMA<span>.</span></h3><p>Portofolio native — HTML, CSS, JS.<br />Terinspirasi oleh white-desert.com & studiors.be</p></div>
       <div><h4>Navigasi</h4><a href="#tentang">Tentang</a><a href="#karya">Karya</a><a href="#kontak">Kontak</a></div>
       <div><h4>Profil</h4><span>Rasendriya M. Adisanto</span><span>Kelas 1CC5</span><span>Casamora Jagakarsa</span></div>
       <div><h4>Palet</h4><div class="palette"><i style="background:#6E3511"></i><i style="background:#91AC67"></i><i style="background:#597928"></i><i style="background:#FCECD8"></i></div><span>#6E3511 • #91AC67<br />#597928 • #FCECD8</span></div>
