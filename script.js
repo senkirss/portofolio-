@@ -154,6 +154,28 @@ document.getElementById('motionToggle')?.addEventListener('click', function(){
   if(v){ paused ? v.pause() : v.play?.().catch(()=>{}); }
 });
 
+// 2e2. Label fase langit — sinkron dengan siklus 72 detik (Pagi→Siang→Senja→Malam)
+(function skyPhase(){
+  const label = document.getElementById('skyPhase');
+  const icon = document.getElementById('skyIcon');
+  if(!label) return;
+  const CYCLE = 72;
+  function tick(){
+    if(document.body.classList.contains('paused')) return;
+    const t = (Date.now() / 1000) % CYCLE;
+    let name = 'Pagi', ic = '🌅';
+    if(t >= 54){ name = 'Malam'; ic = '🌙'; }
+    else if(t >= 36){ name = 'Senja'; ic = '🌇'; }
+    else if(t >= 18){ name = 'Siang'; ic = '☀️'; }
+    if(label.textContent !== name){
+      label.textContent = name;
+      if(icon) icon.textContent = ic;
+    }
+  }
+  tick();
+  setInterval(tick, 1000);
+})();
+
 // 2f. Signature animation — draw R + 5 waves + upward tail
 (function signatureAnim(){
   const canvas = document.getElementById('signatureCanvas');

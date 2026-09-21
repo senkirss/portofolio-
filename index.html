@@ -65,15 +65,23 @@
     <!-- HERO ala White Desert -->
     <section id="hero">
       <div class="hero-bg" id="heroBg">
-        <!-- Lapisan foto perkotaan (fallback + Ken Burns — semua efek tetap) -->
-        <img src="https://images.unsplash.com/photo-1449824913935-59a10b8d2000?q=80&w=2000&auto=format&fit=crop" alt="Langit kota Jakarta saat senja" id="heroImg" class="hero-layer" data-depth="0.02" fetchpriority="high" />
-        <!-- Lapisan video perkotaan (bergerak realistis — traffic & skyline) -->
-        <video class="hero-layer hero-video" data-depth="0.04" autoplay muted loop playsinline preload="auto"
-          poster="https://images.unsplash.com/photo-1449824913935-59a10b8d2000?q=80&w=2000&auto=format&fit=crop">
-          <source src="https://assets.mixkit.co/videos/preview/mixkit-aerial-view-of-city-traffic-at-night-11-large.mp4" type="video/mp4" />
-          <source src="https://cdn.pixabay.com/video/2019/10/09/27669-365224683_large.mp4" type="video/mp4" />
-        </video>
+        <!-- Jakarta siang/senja (fallback + Ken Burns — selalu gerak meski offline) -->
+        <img src="https://commons.wikimedia.org/wiki/Special:FilePath/South%20Jakarta%20buildings%20skyline.jpg?width=1920" alt="Gedung-gedung Jakarta Selatan saat senja" id="heroImg" class="hero-layer" data-depth="0.02" fetchpriority="high" />
+        <!-- Jakarta malam (crossfade otomatis mengikuti siklus waktu) -->
+        <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Jakarta%20skyline%20at%20night%20--%20Business%20District%20area%20at%20Jalan%20Jenderal%20Sudirman%2C%20Central%20Jakarta%2C%20as%20seen%20from%20Kuningan%20District%2C%20South%20Jakarta%2C%20Indonesia.jpg?width=1920" alt="Lampu gedung kawasan bisnis Sudirman Jakarta di malam hari" id="heroNight" class="hero-layer" data-depth="0.03" />
         <div class="hero-overlay"></div>
+        <!-- Tint waktu: siang, senja, malam -->
+        <div class="tint tint-noon"></div>
+        <div class="tint tint-dusk"></div>
+        <div class="tint tint-night"></div>
+        <!-- Matahari & bulan beredar -->
+        <div class="sun" data-depth="0.05"></div>
+        <div class="moon" data-depth="0.05"></div>
+        <!-- Awan bergerak dua lapis -->
+        <div class="clouds clouds-a"></div>
+        <div class="clouds clouds-b"></div>
+        <!-- Kerlap lampu kota saat malam -->
+        <div class="city-lights"></div>
         <div class="sun-glow" data-depth="0.06"></div>
         <!-- Kabut berlapis yang bergerak -->
         <div class="mist mist-a"></div>
@@ -109,6 +117,7 @@
         <div class="scroll-hint"><span></span>Scroll</div>
         <div class="hero-side">
           <div class="hero-coord right">MAN 13<br /><strong>Jakarta Selatan</strong></div>
+          <div class="sky-phase"><span id="skyIcon">🌅</span><span id="skyPhase">Pagi</span></div>
           <button id="motionToggle" title="Jeda / putar animasi latar">❚❚ Latar</button>
         </div>
       </div>
@@ -324,11 +333,11 @@
         </div>
         <div class="work-grid" id="workGrid">
           <article class="work-card reveal" data-cat="web">
-            <img src="https://images.unsplash.com/photo-1467232004584-a241de8bcf5d?q=80&w=900&auto=format&fit=crop" alt="Pratinjau landing page bertema alam" loading="lazy" decoding="async" />
+            <img src="assets/koding.png" alt="Pratinjau landing page bertema alam" loading="lazy" decoding="async" />
             <div class="work-body"><h3>Landing Page Alam</h3><p>Latihan hero fullscreen + parallax sinematik ala White Desert.</p><div class="tech-badges"><span>HTML</span><span>CSS</span><span>JS</span></div></div>
           </article>
           <article class="work-card reveal" data-cat="tugas">
-            <img src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?q=80&w=900&auto=format&fit=crop" alt="Dokumen dan laptop tugas kuliah" loading="lazy" decoding="async" />
+            <img src="assets/open ccit.jpeg" alt="Dokumen dan laptop tugas kuliah" loading="lazy" decoding="async" />
             <div class="work-body"><h3>Tugas Kelas 1CC5</h3><p>Dokumentasi & presentasi tugas — rapi dan terstruktur.</p><div class="tech-badges"><span>Dokumentasi</span><span>Presentasi</span></div></div>
           </article>
           <article class="work-card reveal" data-cat="desain">
@@ -336,11 +345,11 @@
             <div class="work-body"><h3>Poster & Layout</h3><p>Eksplorasi tipografi serif + palet warna earthy.</p><div class="tech-badges"><span>Tipografi</span><span>Layout</span></div></div>
           </article>
           <article class="work-card reveal" data-cat="web">
-            <img src="https://images.unsplash.com/photo-1547658719-da2b51169166?q=80&w=900&auto=format&fit=crop" alt="Pratinjau website portofolio ini" loading="lazy" decoding="async" />
+            <img src="assets/rasenma.png" alt="Pratinjau website portofolio ini" loading="lazy" decoding="async" />
             <div class="work-body"><h3>Portofolio Native</h3><p>Website ini — 100% HTML, CSS, JS tanpa framework. <a href="https://github.com/senkirss/portofolio-" target="_blank" rel="noopener">Lihat source →</a></p><div class="tech-badges"><span>HTML</span><span>CSS</span><span>JS</span><span>Git</span></div></div>
           </article>
           <article class="work-card reveal" data-cat="desain">
-            <img src="https://images.unsplash.com/photo-1493421419110-74f4e85ba126?q=80&w=900&auto=format&fit=crop" alt="Kamera dan hasil fotografi" loading="lazy" decoding="async" />
+            <img src="assets/csamora.webp" alt="Kamera dan hasil fotografi" loading="lazy" decoding="async" />
             <div class="work-body"><h3>Fotografi Jagakarsa</h3><p>Potret suasana tenang sekitar Casamora.</p><div class="tech-badges"><span>Fotografi</span></div></div>
           </article>
           <article class="work-card reveal" data-cat="tugas">
@@ -445,7 +454,7 @@
 
   <footer>
     <div class="container foot-grid">
-      <div><h3>RMA<span>.</span></h3><p>Portofolio native — HTML, CSS, JS.<br />Terinspirasi oleh white-desert.com</p></div>
+      <div><h3>RMA<span>.</span></h3><p>Portofolio native — HTML, CSS, JS.<br />Terinspirasi oleh white-desert.com</p><p class="foot-credit">Foto hero Jakarta: Vitaium via Wikimedia Commons (CC BY-SA 4.0)</p></div>
       <div><h4>Navigasi</h4><a href="#tentang">Tentang</a><a href="#karya">Karya</a><a href="#kontak">Kontak</a></div>
       <div><h4>Profil</h4><span>Rasendriya M. Adisanto</span><span>Kelas 1CC5</span><span>Casamora Jagakarsa</span></div>
       <div><h4>Palet</h4><div class="palette"><i style="background:#6E3511"></i><i style="background:#91AC67"></i><i style="background:#597928"></i><i style="background:#FCECD8"></i></div><span>#6E3511 • #91AC67<br />#597928 • #FCECD8</span></div>
