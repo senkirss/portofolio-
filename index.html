@@ -65,29 +65,24 @@
     <!-- HERO ala White Desert -->
     <section id="hero">
       <div class="hero-bg" id="heroBg">
-        <!-- Jakarta siang/senja (fallback + Ken Burns — selalu gerak meski offline) -->
-        <img src="https://commons.wikimedia.org/wiki/Special:FilePath/South%20Jakarta%20buildings%20skyline.jpg?width=1920" alt="Gedung-gedung Jakarta Selatan saat senja" id="heroImg" class="hero-layer" data-depth="0.02" fetchpriority="high" />
-        <!-- Jakarta malam (crossfade otomatis mengikuti siklus waktu) -->
-        <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Jakarta%20skyline%20at%20night%20--%20Business%20District%20area%20at%20Jalan%20Jenderal%20Sudirman%2C%20Central%20Jakarta%2C%20as%20seen%20from%20Kuningan%20District%2C%20South%20Jakarta%2C%20Indonesia.jpg?width=1920" alt="Lampu gedung kawasan bisnis Sudirman Jakarta di malam hari" id="heroNight" class="hero-layer" data-depth="0.03" />
+        <!-- Jakarta malam: Sudirman Business District (fallback + Ken Burns) -->
+        <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Jakarta%20skyline%20at%20night%20--%20Business%20District%20area%20at%20Jalan%20Jenderal%20Sudirman%2C%20Central%20Jakarta%2C%20as%20seen%20from%20Kuningan%20District%2C%20South%20Jakarta%2C%20Indonesia.jpg?width=1920" alt="Gedung-gedung menyala di kawasan bisnis Sudirman Jakarta pada malam hari" id="heroImg" class="hero-layer" data-depth="0.02" fetchpriority="high" />
         <div class="hero-overlay"></div>
-        <!-- Tint waktu: siang, senja, malam -->
-        <div class="tint tint-noon"></div>
-        <div class="tint tint-dusk"></div>
-        <div class="tint tint-night"></div>
-        <!-- Matahari & bulan beredar -->
-        <div class="sun" data-depth="0.05"></div>
+        <!-- Bulan malam kota -->
         <div class="moon" data-depth="0.05"></div>
-        <!-- Awan bergerak dua lapis -->
+        <!-- Awan terus berjalan di atas langit -->
         <div class="clouds clouds-a"></div>
         <div class="clouds clouds-b"></div>
-        <!-- Kerlap lampu kota saat malam -->
+        <!-- Lalu lintas + jendela gedung yang menyala (canvas) -->
+        <canvas id="cityFx"></canvas>
+        <!-- Kerlap lampu kota -->
         <div class="city-lights"></div>
         <div class="sun-glow" data-depth="0.06"></div>
         <!-- Kabut berlapis yang bergerak -->
         <div class="mist mist-a"></div>
         <div class="mist mist-b"></div>
         <div class="mist mist-c"></div>
-        <!-- Partikel cahaya / daun melayang -->
+        <!-- Partikel cahaya melayang -->
         <canvas id="particles"></canvas>
         <div class="hero-grain"></div>
         <div class="hero-vignette"></div>
@@ -117,7 +112,7 @@
         <div class="scroll-hint"><span></span>Scroll</div>
         <div class="hero-side">
           <div class="hero-coord right">MAN 13<br /><strong>Jakarta Selatan</strong></div>
-          <div class="sky-phase"><span id="skyIcon">🌅</span><span id="skyPhase">Pagi</span></div>
+          <div class="sky-phase">🌙 <span id="skyPhase">Jakarta --:--</span></div>
           <button id="motionToggle" title="Jeda / putar animasi latar">❚❚ Latar</button>
         </div>
       </div>
@@ -454,7 +449,7 @@
 
   <footer>
     <div class="container foot-grid">
-      <div><h3>RMA<span>.</span></h3><p>Portofolio native — HTML, CSS, JS.<br />Terinspirasi oleh white-desert.com</p><p class="foot-credit">Foto hero Jakarta: Vitaium via Wikimedia Commons (CC BY-SA 4.0)</p></div>
+      <div><h3>RMA<span>.</span></h3><p>Portofolio native — HTML, CSS, JS.<br />Terinspirasi oleh white-desert.com</p><p class="foot-credit">Foto hero Jakarta: Wikimedia Commons (CC BY-SA 4.0)</p></div>
       <div><h4>Navigasi</h4><a href="#tentang">Tentang</a><a href="#karya">Karya</a><a href="#kontak">Kontak</a></div>
       <div><h4>Profil</h4><span>Rasendriya M. Adisanto</span><span>Kelas 1CC5</span><span>Casamora Jagakarsa</span></div>
       <div><h4>Palet</h4><div class="palette"><i style="background:#6E3511"></i><i style="background:#91AC67"></i><i style="background:#597928"></i><i style="background:#FCECD8"></i></div><span>#6E3511 • #91AC67<br />#597928 • #FCECD8</span></div>

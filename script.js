@@ -154,26 +154,106 @@ document.getElementById('motionToggle')?.addEventListener('click', function(){
   if(v){ paused ? v.pause() : v.play?.().catch(()=>{}); }
 });
 
-// 2e2. Label fase langit — sinkron dengan siklus 72 detik (Pagi→Siang→Senja→Malam)
-(function skyPhase(){
+// 2e2. Jam live Jakarta (WIB) di hero
+(function wibClock(){
   const label = document.getElementById('skyPhase');
-  const icon = document.getElementById('skyIcon');
   if(!label) return;
-  const CYCLE = 72;
   function tick(){
-    if(document.body.classList.contains('paused')) return;
-    const t = (Date.now() / 1000) % CYCLE;
-    let name = 'Pagi', ic = '🌅';
-    if(t >= 54){ name = 'Malam'; ic = '🌙'; }
-    else if(t >= 36){ name = 'Senja'; ic = '🌇'; }
-    else if(t >= 18){ name = 'Siang'; ic = '☀️'; }
-    if(label.textContent !== name){
-      label.textContent = name;
-      if(icon) icon.textContent = ic;
+    try{
+      label.textContent = 'Jakarta ' + new Intl.DateTimeFormat('id-ID',{hour:'2-digit',minute:'2-digit',timeZone:'Asia/Jakarta'}).format(new Date()) + ' WIB';
+    }catch(e){
+      const d = new Date();
+      label.textContent = 'Jakarta ' + String(d.getHours()).padStart(2,'0') + ':' + String(d.getMinutes()).padStart(2,'0');
     }
   }
   tick();
-  setInterval(tick, 1000);
+  setInterval(tick, 15000);
+})();
+
+// 2e3. cityFx — lalu lintas mengalir + jendela gedung berkelip & menyala
+(function cityFx(){
+  const cv = document.getElementById('cityFx');
+  if(!cv) return;
+  if(window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const ctx = cv.getContext('2d');
+  const hero = document.getElementById('hero');
+  let W = 0, H = 0, cars = [], wins = [], born = performance.now();
+
+  function resize(){
+    const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
+    W = hero.offsetWidth; H = hero.offsetHeight;
+    cv.width = Math.floor(W * dpr); cv.height = Math.floor(H * dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    build();
+  }
+
+  function build(){
+    cars = [];
+    // Arus 1: jalan bawah ke kanan (lampu putih-kuning), Arus 2: ke kiri (lampu merah)
+    const lanes = [
+      {y: 0.885, dir: 1, col: '255,225,160', n: 16, sp: [0.00045, 0.0009]},
+      {y: 0.915, dir: 1, col: '255,240,200', n: 12, sp: [0.00035, 0.0007]},
+      {y: 0.945, dir: -1, col: '255,90,80', n: 15, sp: [0.00045, 0.0009]},
+      {y: 0.970, dir: -1, col: '255,120,100', n: 11, sp: [0.00035, 0.0007]}
+    ];
+    lanes.forEach(L=>{
+      for(let i = 0; i < L.n; i++){
+        cars.push({lane: L, x: Math.random(), v: (L.sp[0] + Math.random() * (L.sp[1] - L.sp[0])) * L.dir, r: 1.4 + Math.random() * 1.6});
+      }
+    });
+    // Jendela gedung: titik hangat di zona menara (tengah), berkelip acak
+    wins = [];
+    const nw = Math.floor(W / 9);
+    for(let i = 0; i < nw; i++){
+      wins.push({
+        x: Math.random() * W,
+        y: H * (0.12 + Math.random() * 0.55),
+        r: 0.8 + Math.random() * 1.5,
+        ph: Math.random() * Math.PI * 2,
+        sp: 0.008 + Math.random() * 0.03,
+        c: ['255,205,130', '255,225,170', '170,215,255'][Math.floor(Math.random() * 3)]
+      });
+    }
+  }
+
+  function frame(now){
+    requestAnimationFrame(frame);
+    if(document.body.classList.contains('paused')) return;
+    const intro = Math.min(1, (now - born) / 2600); // gedung "menyala" bertahap
+    ctx.clearRect(0, 0, W, H);
+    // Jendela berkelip
+    wins.forEach(p=>{
+      const a = (0.25 + 0.75 * (0.5 + 0.5 * Math.sin(now * p.sp + p.ph))) * intro;
+      if(a < 0.03) return;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(${p.c},${a.toFixed(2)})`;
+      ctx.shadowColor = `rgba(${p.c},.9)`; ctx.shadowBlur = 6;
+      ctx.fill(); ctx.shadowBlur = 0;
+    });
+    // Lalu lintas mengalir dengan jejak cahaya
+    cars.forEach(c=>{
+      c.x += c.v * 16;
+      if(c.x > 1.03) c.x = -0.03;
+      if(c.x < -0.03) c.x = 1.03;
+      const x = c.x * W, y = c.lane.y * H;
+      const tx = x - c.lane.dir * 26; // ekor jejak
+      const g = ctx.createLinearGradient(tx, y, x, y);
+      g.addColorStop(0, `rgba(${c.lane.col},0)`);
+      g.addColorStop(1, `rgba(${c.lane.col},${(0.85 * intro).toFixed(2)})`);
+      ctx.strokeStyle = g; ctx.lineWidth = c.r; ctx.lineCap = 'round';
+      ctx.beginPath(); ctx.moveTo(tx, y); ctx.lineTo(x, y); ctx.stroke();
+      ctx.beginPath();
+      ctx.arc(x, y, c.r, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(${c.lane.col},${intro.toFixed(2)})`;
+      ctx.shadowColor = `rgba(${c.lane.col},.9)`; ctx.shadowBlur = 8;
+      ctx.fill(); ctx.shadowBlur = 0;
+    });
+  }
+
+  resize();
+  window.addEventListener('resize', resize);
+  requestAnimationFrame(frame);
 })();
 
 // 2f. Signature animation — draw R + 5 waves + upward tail
