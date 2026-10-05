@@ -706,12 +706,18 @@ document.querySelectorAll('.chip').forEach(btn=>{
   const stars = n => '★'.repeat(n) + '☆'.repeat(5 - n);
   const esc = s => String(s).replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 
+  const AVATAR_COLORS = ['#6E3511', '#597928', '#91AC67'];
+  const fmtDate = iso =>{ try{ return new Intl.DateTimeFormat('id-ID',{day:'numeric',month:'short',year:'numeric'}).format(new Date(iso + 'T00:00:00')); }catch(e){ return iso; } };
+
   function render(all){
-    grid.innerHTML = all.map(r=>`
+    grid.innerHTML = all.map((r, i)=>`
       <article class="review-card reveal visible">
-        <div class="stars">${stars(Math.max(1, Math.min(5, +r.rating || 5)))}</div>
+        <div class="review-top">
+          <span class="avatar" style="background:${AVATAR_COLORS[i % AVATAR_COLORS.length]}">${esc((r.nama || '?').trim().charAt(0).toUpperCase())}</span>
+          <div class="review-id"><strong>${esc(r.nama)}</strong><span>${esc(r.peran || 'Pengunjung')} • ${esc(fmtDate(r.tanggal))}</span></div>
+        </div>
+        <div class="stars" aria-label="Rating ${+r.rating || 5} dari 5">${stars(Math.max(1, Math.min(5, +r.rating || 5)))}</div>
         <p>“${esc(r.pesan)}”</p>
-        <footer><strong>${esc(r.nama)}</strong><span>${esc(r.peran || 'Pengunjung')} • ${esc(r.tanggal)}</span></footer>
       </article>`).join('');
     const avg = all.length ? all.reduce((a, r)=> a + (+r.rating || 0), 0) / all.length : 0;
     document.getElementById('avgScore').textContent = avg.toFixed(1).replace('.', ',');
