@@ -155,7 +155,8 @@ INSERT INTO nav_links (urutan, label, href) VALUES
 (3, 'Pendidikan', '#pendidikan'),
 (4, 'Karya', '#karya'),
 (5, 'Perjalanan', '#perjalanan'),
-(6, 'Hubungi Saya', '#kontak');
+(6, 'Ulasan', '#ulasan'),
+(7, 'Hubungi Saya', '#kontak');
 
 CREATE TABLE IF NOT EXISTS site_settings (
   kunci VARCHAR(50) PRIMARY KEY,
@@ -169,3 +170,20 @@ INSERT INTO site_settings (kunci, nilai) VALUES
 ('warna_olive', '#597928'),
 ('warna_cream', '#FCECD8'),
 ('copyright', '© 2026 Rasendriya Muhammad Adisanto');
+
+-- ------------------------------------------------------------
+-- 8. Ulasan / rating (section #ulasan)
+-- ------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS reviews (
+  id      INT AUTO_INCREMENT PRIMARY KEY,
+  nama    VARCHAR(100) NOT NULL,
+  peran   VARCHAR(100) NOT NULL DEFAULT 'Pengunjung',
+  rating  TINYINT NOT NULL CHECK (rating BETWEEN 1 AND 5),
+  pesan   TEXT NOT NULL,
+  tanggal DATE NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+INSERT INTO reviews (nama, peran, rating, pesan, tanggal) VALUES
+('Rizky', 'Rekan 1CC5', 5, 'Webnya cepat dan rapi. Bagian tanda tangannya keren, kayak ditulis beneran.', '2026-09-20'),
+('Salsa', 'Rekan 1CC5', 5, 'Navigasinya gampang, warnanya enak dilihat. Cocok buat contoh portofolio tugas.', '2026-09-22'),
+('Fajar', 'Teman MAN 13', 4, 'Sudah bagus dan niat. Saran saya tambah mode gelap biar makin mantap.', '2026-09-25');

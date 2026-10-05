@@ -689,6 +689,66 @@ document.querySelectorAll('.chip').forEach(btn=>{
   }
 })();
 
+// 9b. Ulasan — render + rata-rata + simpan lokal (cermin tabel reviews di data.sql)
+(function reviews(){
+  const grid = document.getElementById('reviewGrid');
+  const form = document.getElementById('reviewForm');
+  if(!grid || !form) return;
+  const SEED = [
+    {nama:'Rizky', peran:'Rekan 1CC5', rating:5, pesan:'Webnya cepat dan rapi. Bagian tanda tangannya keren, kayak ditulis beneran.', tanggal:'2026-09-20'},
+    {nama:'Salsa', peran:'Rekan 1CC5', rating:5, pesan:'Navigasinya gampang, warnanya enak dilihat. Cocok buat contoh portofolio tugas.', tanggal:'2026-09-22'},
+    {nama:'Fajar', peran:'Teman MAN 13', rating:4, pesan:'Sudah bagus dan niat. Saran saya tambah mode gelap biar makin mantap.', tanggal:'2026-09-25'}
+  ];
+  const KEY = 'rma_reviews';
+  const load = ()=>{ try{ return JSON.parse(localStorage.getItem(KEY)) || []; }catch(e){ return []; } };
+  const save = v =>{ try{ localStorage.setItem(KEY, JSON.stringify(v)); }catch(e){} };
+  const stars = n => '★'.repeat(n) + '☆'.repeat(5 - n);
+  const esc = s => s.replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+  function render(){
+    const all = [...SEED, ...load()];
+    grid.innerHTML = all.map(r=>`
+      <article class="review-card reveal visible">
+        <div class="stars">${stars(Math.max(1, Math.min(5, r.rating)))}</div>
+        <p>“${esc(r.pesan)}”</p>
+        <footer><strong>${esc(r.nama)}</strong><span>${esc(r.peran || 'Pengunjung')} • ${esc(r.tanggal)}</span></footer>
+      </article>`).join('');
+    const avg = all.reduce((a, r)=> a + r.rating, 0) / all.length;
+    document.getElementById('avgScore').textContent = avg.toFixed(1).replace('.', ',');
+    document.getElementById('avgStars').textContent = stars(Math.round(avg));
+    document.getElementById('reviewCount').textContent = all.length + ' ulasan';
+  }
+
+  let rating = 5;
+  const starBtns = [...document.querySelectorAll('#starInput button')];
+  function paint(v){ starBtns.forEach(b=> b.classList.toggle('lit', +b.dataset.v <= v)); }
+  starBtns.forEach(b=> b.addEventListener('click', ()=>{ rating = +b.dataset.v; paint(rating); }));
+  paint(rating);
+
+  const msg = document.getElementById('reviewMsg');
+  form.addEventListener('submit', e=>{
+    e.preventDefault();
+    const nama = document.getElementById('rNama').value.trim();
+    const peran = document.getElementById('rPeran').value.trim() || 'Pengunjung';
+    const pesan = document.getElementById('rPesan').value.trim();
+    if(!nama || !pesan){
+      msg.textContent = 'Isi nama dan ulasan dulu ya.';
+      msg.className = 'form-message err';
+      return;
+    }
+    const items = load();
+    items.push({nama, peran, rating, pesan, tanggal:new Date().toISOString().slice(0, 10)});
+    save(items);
+    render();
+    form.reset();
+    rating = 5; paint(rating);
+    msg.textContent = `Makasih, ${nama}! Ulasan bintang ${rating} kamu sudah tampil. ⭐`;
+    msg.className = 'form-message ok';
+  });
+
+  render();
+})();
+
 // 10. Back to top + active nav
 document.getElementById('toTop').addEventListener('click', ()=> window.scrollTo({top:0, behavior:'smooth'}));
 

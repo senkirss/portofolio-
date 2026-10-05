@@ -44,6 +44,7 @@
       <a href="#pendidikan">Pendidikan</a>
       <a href="#karya">Karya</a>
       <a href="#perjalanan">Perjalanan</a>
+      <a href="#ulasan">Ulasan</a>
     </nav>
     <div class="nav-right">
       <a href="#kontak" class="btn btn-small">Hubungi Saya</a>
@@ -58,6 +59,7 @@
     <a href="#pendidikan">Pendidikan</a>
     <a href="#karya">Karya</a>
     <a href="#perjalanan">Perjalanan</a>
+    <a href="#ulasan">Ulasan</a>
     <a href="#kontak" class="btn">Hubungi Saya</a>
   </div>
 
@@ -377,12 +379,54 @@
       </div>
     </section>
 
+    <!-- ULASAN -->
+    <section id="ulasan" class="section cream">
+      <div class="section-atmos" data-depth="0.01" style="background-image:url('https://images.unsplash.com/photo-1521737604893-d14cc237f11d?q=80&w=1600&auto=format&fit=crop')"></div>
+      <div class="container">
+        <p class="label reveal">06 — Ulasan</p>
+        <div class="section-head">
+          <h2 class="big-serif reveal">Kata <em>mereka.</em></h2>
+          <div class="rating-summary reveal">
+            <strong id="avgScore">0.0</strong>
+            <div><div class="stars" id="avgStars">☆☆☆☆☆</div><span id="reviewCount">0 ulasan</span></div>
+          </div>
+        </div>
+        <div class="review-grid" id="reviewGrid"></div>
+        <form id="reviewForm" class="reveal contact-form review-form" novalidate>
+          <h3>Tulis ulasanmu</h3>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="rNama"><span class="label-text">Nama</span><span class="label-icon">👤</span></label>
+              <div class="input-wrapper"><input type="text" id="rNama" placeholder=" " required autocomplete="name" /><span class="input-border"></span></div>
+            </div>
+            <div class="form-group">
+              <label for="rPeran"><span class="label-text">Peran (opsional)</span><span class="label-icon">🎓</span></label>
+              <div class="input-wrapper"><input type="text" id="rPeran" placeholder=" " autocomplete="organization" /><span class="input-border"></span></div>
+            </div>
+          </div>
+          <div class="form-group">
+            <span class="label-text">Rating</span>
+            <div class="star-input" id="starInput" role="radiogroup" aria-label="Rating 1 sampai 5">
+              <button type="button" data-v="1" aria-label="1 bintang">★</button><button type="button" data-v="2" aria-label="2 bintang">★</button><button type="button" data-v="3" aria-label="3 bintang">★</button><button type="button" data-v="4" aria-label="4 bintang">★</button><button type="button" data-v="5" aria-label="5 bintang">★</button>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="rPesan"><span class="label-text">Ulasan</span><span class="label-icon">💬</span></label>
+            <div class="input-wrapper textarea-wrapper"><textarea id="rPesan" rows="4" placeholder=" " required></textarea><span class="input-border"></span></div>
+          </div>
+          <p id="reviewMsg" class="form-message"></p>
+          <button type="submit" class="btn btn-submit"><span class="btn-text">Kirim Ulasan</span><span class="btn-icon">→</span><span class="btn-loader"></span></button>
+          <p class="form-hint">Ulasanmu langsung tampil & tersimpan di browser ini.</p>
+        </form>
+      </div>
+    </section>
+
     <!-- KONTAK ala Enquire -->
     <section id="kontak" class="section cream contact">
       <div class="section-atmos" data-depth="0.01" style="background-image:url('https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=1600&auto=format&fit=crop')"></div>
       <div class="container split">
         <div class="split-left">
-          <p class="label reveal">06 — Kontak</p>
+          <p class="label reveal">07 — Kontak</p>
           <h2 class="big-serif reveal">Mulai <em>percakapan.</em></h2>
           <p class="reveal">Tertarik kolaborasi, tugas kelompok, atau sekadar menyapa? Kirim pesan — saya akan membalas secepat mungkin.</p>
           <ul class="contact-list reveal">
