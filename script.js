@@ -218,7 +218,7 @@ window.addEventListener('scroll', ()=>{
     const cw = canvas.width / dpr;
     const ch = canvas.height / dpr;
     ctx.clearRect(0, 0, cw, ch);
-    ctx.strokeStyle = '#6E3511';
+    ctx.strokeStyle = document.body.classList.contains('dark-mode') ? '#F1E2C9' : '#6E3511';
     ctx.lineWidth = 2.6;
     ctx.globalAlpha = 1;
 
@@ -323,6 +323,29 @@ window.addEventListener('scroll', ()=>{
   });
 
   animate();
+  // Dipanggil ulang saat tema diganti agar tinta menyesuaikan
+  window.__redrawSignature = ()=> draw(progress >= 1 ? 1 : progress);
+})();
+
+// 2g. Dark mode — toggle + ingat pilihan
+(function theme(){
+  const btn = document.getElementById('themeToggle');
+  const root = document.body;
+  let saved = null;
+  try{ saved = localStorage.getItem('rma-theme'); }catch(e){}
+  if(saved === 'dark') root.classList.add('dark-mode');
+  function sync(){
+    if(!btn) return;
+    btn.textContent = root.classList.contains('dark-mode') ? '☀️' : '🌙';
+    btn.setAttribute('aria-label', root.classList.contains('dark-mode') ? 'Alihkan ke mode terang' : 'Alihkan ke mode gelap');
+  }
+  sync();
+  btn?.addEventListener('click', ()=>{
+    root.classList.toggle('dark-mode');
+    try{ localStorage.setItem('rma-theme', root.classList.contains('dark-mode') ? 'dark' : 'light'); }catch(e){}
+    sync();
+    if(window.__redrawSignature) window.__redrawSignature();
+  });
 })();
 
 // 3. Mobile menu
