@@ -689,7 +689,7 @@ document.querySelectorAll('.chip').forEach(btn=>{
   }
 })();
 
-// 9b. Ulasan — render + rata-rata + simpan lokal (cermin tabel reviews di data.sql)
+// 9b. Ulasan — Firestore (kalau backend aktif) atau lokal (cermin data.sql)
 (function reviews(){
   const grid = document.getElementById('reviewGrid');
   const form = document.getElementById('reviewForm');
@@ -699,24 +699,24 @@ document.querySelectorAll('.chip').forEach(btn=>{
     {nama:'Salsa', peran:'Rekan 1CC5', rating:5, pesan:'Navigasinya gampang, warnanya enak dilihat. Cocok buat contoh portofolio tugas.', tanggal:'2026-09-22'},
     {nama:'Fajar', peran:'Teman MAN 13', rating:4, pesan:'Sudah bagus dan niat. Saran saya tambah mode gelap biar makin mantap.', tanggal:'2026-09-25'}
   ];
+  const backend = window.RMA_BACKEND || null;
   const KEY = 'rma_reviews';
   const load = ()=>{ try{ return JSON.parse(localStorage.getItem(KEY)) || []; }catch(e){ return []; } };
   const save = v =>{ try{ localStorage.setItem(KEY, JSON.stringify(v)); }catch(e){} };
   const stars = n => '★'.repeat(n) + '☆'.repeat(5 - n);
-  const esc = s => s.replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const esc = s => String(s).replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 
-  function render(){
-    const all = [...SEED, ...load()];
+  function render(all){
     grid.innerHTML = all.map(r=>`
       <article class="review-card reveal visible">
-        <div class="stars">${stars(Math.max(1, Math.min(5, r.rating)))}</div>
+        <div class="stars">${stars(Math.max(1, Math.min(5, +r.rating || 5)))}</div>
         <p>“${esc(r.pesan)}”</p>
         <footer><strong>${esc(r.nama)}</strong><span>${esc(r.peran || 'Pengunjung')} • ${esc(r.tanggal)}</span></footer>
       </article>`).join('');
-    const avg = all.reduce((a, r)=> a + r.rating, 0) / all.length;
+    const avg = all.length ? all.reduce((a, r)=> a + (+r.rating || 0), 0) / all.length : 0;
     document.getElementById('avgScore').textContent = avg.toFixed(1).replace('.', ',');
-    document.getElementById('avgStars').textContent = stars(Math.round(avg));
-    document.getElementById('reviewCount').textContent = all.length + ' ulasan';
+    document.getElementById('avgStars').textContent = all.length ? stars(Math.round(avg)) : '☆☆☆☆☆';
+    document.getElementById('reviewCount').textContent = all.length + ' ulasan' + (backend ? ' • live' : '');
   }
 
   let rating = 5;
@@ -726,27 +726,62 @@ document.querySelectorAll('.chip').forEach(btn=>{
   paint(rating);
 
   const msg = document.getElementById('reviewMsg');
-  form.addEventListener('submit', e=>{
-    e.preventDefault();
-    const nama = document.getElementById('rNama').value.trim();
-    const peran = document.getElementById('rPeran').value.trim() || 'Pengunjung';
-    const pesan = document.getElementById('rPesan').value.trim();
-    if(!nama || !pesan){
-      msg.textContent = 'Isi nama dan ulasan dulu ya.';
-      msg.className = 'form-message err';
-      return;
-    }
-    const items = load();
-    items.push({nama, peran, rating, pesan, tanggal:new Date().toISOString().slice(0, 10)});
-    save(items);
-    render();
-    form.reset();
-    rating = 5; paint(rating);
-    msg.textContent = `Makasih, ${nama}! Ulasan bintang ${rating} kamu sudah tampil. ⭐`;
-    msg.className = 'form-message ok';
-  });
+  const btn = form.querySelector('.btn-submit');
+  const today = ()=> new Date().toISOString().slice(0, 10);
 
-  render();
+  if(backend){
+    // Mode live: baca/tulis Firestore realtime
+    backend.seedIfEmpty(SEED).catch(()=>{});
+    backend.subscribe(all=>{
+      if(all) render(all);
+      else render([...SEED, ...load()]); // gagal baca → fallback lokal
+    });
+    form.addEventListener('submit', async e=>{
+      e.preventDefault();
+      const nama = document.getElementById('rNama').value.trim();
+      const peran = document.getElementById('rPeran').value.trim() || 'Pengunjung';
+      const pesan = document.getElementById('rPesan').value.trim();
+      if(!nama || !pesan){
+        msg.textContent = 'Isi nama dan ulasan dulu ya.';
+        msg.className = 'form-message err';
+        return;
+      }
+      btn.classList.add('sending'); btn.disabled = true;
+      try{
+        await backend.add({nama, peran, rating, pesan, tanggal: today()});
+        form.reset(); rating = 5; paint(rating);
+        msg.textContent = `Makasih, ${nama}! Ulasanmu tayang untuk semua pengunjung. ⭐`;
+        msg.className = 'form-message ok';
+      }catch(err){
+        msg.textContent = 'Gagal menyimpan. Coba lagi ya.';
+        msg.className = 'form-message err';
+      }finally{
+        btn.classList.remove('sending'); btn.disabled = false;
+      }
+    });
+  }else{
+    // Mode lokal: seed + localStorage
+    render([...SEED, ...load()]);
+    form.addEventListener('submit', e=>{
+      e.preventDefault();
+      const nama = document.getElementById('rNama').value.trim();
+      const peran = document.getElementById('rPeran').value.trim() || 'Pengunjung';
+      const pesan = document.getElementById('rPesan').value.trim();
+      if(!nama || !pesan){
+        msg.textContent = 'Isi nama dan ulasan dulu ya.';
+        msg.className = 'form-message err';
+        return;
+      }
+      const items = load();
+      items.push({nama, peran, rating, pesan, tanggal: today()});
+      save(items);
+      render([...SEED, ...load()]);
+      form.reset();
+      rating = 5; paint(rating);
+      msg.textContent = `Makasih, ${nama}! Ulasan bintang ${rating} kamu sudah tampil. ⭐`;
+      msg.className = 'form-message ok';
+    });
+  }
 })();
 
 // 10. Back to top + active nav

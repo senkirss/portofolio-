@@ -1,0 +1,23 @@
+// Aturan keamanan Firestore untuk koleksi "reviews".
+// Cara pakai: Firebase Console → Firestore Database → tab Rules → tempel → Publish.
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /reviews/{id} {
+      // Semua orang boleh membaca ulasan
+      allow read: if true;
+      // Membuat ulasan: rating 1-5, nama & pesan wajib dan dibatasi panjangnya
+      allow create: if request.resource.data.rating is int
+        && request.resource.data.rating >= 1
+        && request.resource.data.rating <= 5
+        && request.resource.data.nama is string
+        && request.resource.data.nama.size() > 0
+        && request.resource.data.nama.size() <= 100
+        && request.resource.data.pesan is string
+        && request.resource.data.pesan.size() > 0
+        && request.resource.data.pesan.size() <= 1000;
+      // Tidak ada yang boleh edit/hapus lewat web
+      allow update, delete: if false;
+    }
+  }
+}

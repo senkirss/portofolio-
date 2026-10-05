@@ -38,6 +38,16 @@ Tanpa build, tanpa server — cukup buka `index.html` di browser. Atau serve lok
 npx serve .
 ```
 
+## Ulasan (opsional: database live)
+
+Tanpa setup, ulasan tersimpan di browser masing-masing (localStorage).
+Agar ulasan permanen untuk semua pengunjung:
+
+1. Buat project di console.firebase.google.com → Firestore Database (Jakarta)
+2. Tempel `firestore.rules` ke tab Rules → Publish
+3. Daftarkan Web app → copy `firebaseConfig` → tempel ke `reviews-backend.js`
+4. Commit — ulasan jadi realtime. (`data.sql` memuat skema MySQL alternatif.)
+
 ## Kontak
 
 - WhatsApp: [0852-1211-4058](https://wa.me/6285212114058)
